@@ -34,7 +34,7 @@ public class MossRunner {
 
         // print logging output to the console since we're not running
         // in Bioclipse environment
-        org.apache.log4j.BasicConfigurator.configure();
+//        org.apache.log4j.BasicConfigurator.configure();
         
         // Model to store our data
         MossModel mossModel = new MossModel();
