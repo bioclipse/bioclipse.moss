@@ -14,14 +14,27 @@ Require-Bundle: org.eclipse.ui,
  org.springframework.bundle.spring.aop,
  net.sf.cglib,
  org.springframework.osgi.aopalliance.osgi,
- net.bioclipse.scripting.ui
+ net.bioclipse.scripting.ui,
+ net.bioclipse.rdf,
+ org.eclipse.ui.views;bundle-version="3.4.1"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Import-Package: net.bioclipse,
+ net.bioclipse.chembl,
+ net.bioclipse.chembl.business,
  net.bioclipse.moss,
+ net.bioclipse.rdf.business,
+ net.bioclipse.rdf.model,
  net.bioclipse.scripting.ui.views,
  org.apache.log4j,
  org.eclipse.core.resources,
- org.eclipse.ui.ide,
- org.openscience.cdk,
- org.openscience.cdk.smiles
+ org.eclipse.ui.ide
 Bundle-ActivationPolicy: lazy
+Bundle-ClassPath: jar/jcommon-1.0.16.jar,
+ jar/jfreechart-1.0.13.jar,
+ .,
+ jar/jfreechart-1.0.13-experimental.jar,
+ jar/jfreechart-1.0.13-swt.jar
+
+
+
+
