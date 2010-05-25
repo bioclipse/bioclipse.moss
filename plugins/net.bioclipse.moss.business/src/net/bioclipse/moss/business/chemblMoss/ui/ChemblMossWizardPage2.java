@@ -28,6 +28,7 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.PlatformUI;
 
 public class ChemblMossWizardPage2 extends WizardPage {
 
@@ -58,11 +59,10 @@ public class ChemblMossWizardPage2 extends WizardPage {
 	    layout.verticalSpacing = 5;
 	    layout.horizontalSpacing = 5;
 		container.setLayout(layout);
-		
 		setControl(container);
 		setMessage("This is an application for MoSS. Compounds are collected from chEMBL by simply \nchosing a Kinase" +
 		" protein family. For further information go to help. ");
-		setPageComplete(false);
+		
 
 
 		label = new Label(container, SWT.NONE);

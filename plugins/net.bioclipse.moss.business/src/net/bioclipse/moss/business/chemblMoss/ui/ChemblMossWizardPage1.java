@@ -1,5 +1,6 @@
 package net.bioclipse.moss.business.chemblMoss.ui;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 import net.bioclipse.chembl.Activator;
@@ -8,6 +9,8 @@ import net.bioclipse.core.business.BioclipseException;
 import net.bioclipse.rdf.model.IStringMatrix;
 
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.jface.operation.IRunnableContext;
+import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.operation.ModalContext;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
@@ -24,14 +27,23 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Spinner;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
-
-public class ChemblMossWizardPage1 extends WizardPage {
+import org.eclipse.ui.PlatformUI;
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartFrame;
+import org.jfree.chart.JFreeChart;
+import org.jfree.data.category.CategoryDataset;
+import org.jfree.data.category.DefaultCategoryDataset;
+import org.jfree.data.general.DefaultPieDataset;
+import org.jfree.ui.RefineryUtilities;
+public class ChemblMossWizardPage1 extends WizardPage implements IRunnableContext{
 
 	private IChEMBLManager chembl;
 	private Label label, info;
@@ -40,14 +52,19 @@ public class ChemblMossWizardPage1 extends WizardPage {
 	private Table table;
 	private TableColumn column1;
 	private Spinner spinn;
-	private Button button;
+	private Button button, buttonb, check;
 	private Text text;
 	public static final String PAGE_NAME = "one";
 
+	
 	public ChemblMossWizardPage1(String pagename){
 		super(pagename);
 		chembl = Activator.getDefault().getJavaChEMBLManager();
+
 	}	
+	public void performHelp() {
+		PlatformUI.getWorkbench().getHelpSystem().displayHelp();		
+	}
 
 	@Override
 	public void createControl(Composite parent) {
@@ -55,7 +72,7 @@ public class ChemblMossWizardPage1 extends WizardPage {
 		final GridLayout layout = new GridLayout(2, false);
 		layout.marginRight = 2;
 		layout.marginLeft = 2;
-		layout.marginBottom = -8;
+		layout.marginBottom = 2;
 		layout.marginTop = 10;
 		layout.marginWidth = 2;
 		layout.marginHeight = 2;
@@ -63,11 +80,11 @@ public class ChemblMossWizardPage1 extends WizardPage {
 		layout.horizontalSpacing = 5;
 		container.setLayout(layout);
 
+		PlatformUI.getWorkbench().getHelpSystem().setHelp(container, "net.bioclipse.moss.business.helpmessage");
 		setControl(container);
 		setMessage("This is an application for MoSS. Compounds are collected from chEMBL by simply \nchosing a Kinase" +
 		" protein family. For further information go to help. ");
 		setPageComplete(false);
-
 
 		label = new Label(container, SWT.NONE);
 		gridData = new GridData(GridData.FILL);
@@ -87,12 +104,28 @@ public class ChemblMossWizardPage1 extends WizardPage {
 		cbox.setItems(items);
 		cbox.addSelectionListener(new SelectionAdapter(){
 			public void widgetSelected(SelectionEvent e) {
-				String selected = cbox.getItem(cbox.getSelectionIndex());
+				final String selected = cbox.getItem(cbox.getSelectionIndex());
+				
 				try {
 					table.clearAll();
 					table.removeAll();
 					setErrorMessage(null);
 
+//					getContainer().run(true, true, new IRunnableWithProgress() {
+//					      public void run(IProgressMonitor monitor) {
+//					    	  int sum = 10;
+//					          monitor.beginTask("Computing sum: ", sum);
+//					    	  list = chembl.MossAvailableActivities(selected);
+//					         for (int i = 0; i < sum; i++) {
+//					            monitor.subTask(Integer.toString(i));
+//					            //sleep to simulate long running operation
+//					            
+//					            Thread.sleep(100);
+//					            monitor.worked(1);
+//					         }
+//					         monitor.done();
+//					      }
+//					   });
 					List<String> list = chembl.MossAvailableActivities(selected);
 					if(list.size()>0){
 						String[] item = new String[list.size()];
@@ -100,12 +133,13 @@ public class ChemblMossWizardPage1 extends WizardPage {
 							item[i]= list.get(i);
 						}		
 
+						
 						if(cboxAct.isEnabled()){
 							if(cboxAct.getSelection().x == cboxAct.getSelection().y){
 								cboxAct.setItems(item);
-								
+
 							}else{
-								
+
 								/*EMERGENCY SOLUTION.. To solve the problem
 									that involves changing the protein family...
 								 */
@@ -116,7 +150,7 @@ public class ChemblMossWizardPage1 extends WizardPage {
 								for(int i = 0; i< list.size(); i++){
 									cboxAct.add(item[i]);	
 								}
-								
+
 								//Remove the old items in the combobox
 								int oldlistsize = cboxAct.getItemCount() - list.size();
 								String index = cboxAct.getText();//cboxAct.getItem(cboxAct.getSelectionIndex());
@@ -126,7 +160,7 @@ public class ChemblMossWizardPage1 extends WizardPage {
 								for(int i = 0; i< oldItems.length;i++){
 									oldItemsList.add(oldItems[i]);
 								}
-								
+
 								//New query with the given settings
 								//if(oldItemsList.contains((index))==true){
 								if(list.contains((index))==true){
@@ -194,12 +228,14 @@ public class ChemblMossWizardPage1 extends WizardPage {
 					button.setEnabled(true);
 					spinn.setEnabled(true);
 					cboxAct.setEnabled(true);
+
+					
 					/*Count the amount of compounds there is for one hit,
 					 * i.e. same query without limit.
 					 * */
-					IStringMatrix matrix2;
+					 
 					try {
-						matrix2 = chembl.MossProtFamilyCompounds(cbox.getItem(cbox.getSelectionIndex()),cboxAct.getItem(cboxAct.getSelectionIndex()));
+						IStringMatrix matrix2 = chembl.MossProtFamilyCompounds(cbox.getItem(cbox.getSelectionIndex()),cboxAct.getItem(cboxAct.getSelectionIndex()));
 						info.setText("Total compund hit: "+ matrix2.getRowCount());
 					} catch (BioclipseException e1) {
 						// TODO Auto-generated catch block
@@ -211,10 +247,70 @@ public class ChemblMossWizardPage1 extends WizardPage {
 				setPageComplete(true);
 			} 
 		});
-
+		check = new Button(container, SWT.CHECK);
+		check.setText("Cut-off");
+		gridData = new GridData(GridData.BEGINNING);
+		gridData.horizontalSpan = 1;
+		check.setLayoutData(gridData);
 		/*Limits the search
 		 * The users are able to limit there search or to be saved data.*/
 
+		button = new Button(container, SWT.PUSH);
+		button.setText("Histogram");
+		gridData = new GridData();
+		gridData.horizontalSpan = 1; 
+		button.setLayoutData(gridData);
+		button.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent e) {
+				
+//			    
+//				CategoryDataset data = new CategoryDataset(); 
+//				data.
+//				data.setValue("Category 1", 43.2); 
+//				data.setValue("Category 2", 27.9); 
+//				data.setValue("Category 3", 79.5); 
+//				
+//			ChartFrame c = ChartFactory.createBarChart("histogram", "","", data, true, true, true, true)
+//				 XYBarChartDemo1 xybarchartdemo1 = new XYBarChartDemo1("State Executions - USA");
+//			        xybarchartdemo1.pack();
+//			        RefineryUtilities.centerFrameOnScreen(xybarchartdemo1);
+//			        xybarchartdemo1.setVisible(true);
+//			    
+//				
+//				
+//				
+//				JFreeChart chart = ChartFactory.createPieChart(
+//				"Sample Pie Chart", data,true,true,false);
+//				
+//				ChartFrame frame = new ChartFrame("First", chart); 
+//				frame.pack(); 
+//				frame.setVisible(true);
+				
+				
+//				Shell shell = new Shell(SWT.DIALOG_TRIM | SWT.APPLICATION_MODAL);
+//				final GridLayout layout = new GridLayout(2, false);
+//				shell.setLayout(layout);
+//				text = new Text(shell, SWT.NONE);
+//				text.setText("Annzi har en bra dag");
+//				shell.pack();
+//				shell.open();
+			}
+			});
+		
+		spinn = new Spinner(container,SWT.PUSH);
+		spinn.setTextLimit(1000000);
+		spinn.setSelection(0);
+		gridData = new GridData(GridData.BEGINNING);
+		gridData.horizontalSpan = 1;
+		spinn.setLayoutData(gridData);
+		
+		spinn = new Spinner(container,SWT.PUSH);
+		spinn.setTextLimit(1000000);
+		spinn.setSelection(10000);
+		gridData = new GridData(GridData.BEGINNING);
+		gridData.horizontalSpan = 1;
+		spinn.setLayoutData(gridData);
+		
 		label = new Label(container, SWT.NONE);
 		gridData = new GridData(GridData.FILL);
 		gridData.grabExcessHorizontalSpace = true;
@@ -290,6 +386,34 @@ public class ChemblMossWizardPage1 extends WizardPage {
 			}
 		});
 
+
+		label = new Label(container, SWT.NONE);
+		label.setText("File directory: ");
+		gridData = new GridData(GridData.FILL);
+		gridData.grabExcessHorizontalSpace = true;
+		gridData.horizontalSpan = 2;
+		label.setLayoutData(gridData);
+
+		text = new Text(container, SWT.BORDER|SWT.FILL);
+		text.setText("MossFile");
+		gridData = new GridData(GridData.FILL_HORIZONTAL);
+		gridData.horizontalSpan = 1;
+		text.setLayoutData(gridData);
+
+		text.addModifyListener(new ModifyListener() {
+			public void modifyText(ModifyEvent e) {
+				if (e.getSource() instanceof Text) {
+					Text txt = (Text) e.getSource();
+					((ChemblMossWizard) getWizard()).data.m  = txt.getText();
+				}
+			}
+		});
+	
+		buttonb = new Button(container, SWT.NONE);
+		buttonb.setText("Browse");
+		gridData = new GridData();
+		gridData.horizontalSpan = 1;
+		buttonb.setLayoutData(gridData);
 	}//end container
 
 	// General method for adding items(i.e. compounds) to the table
@@ -308,6 +432,13 @@ public class ChemblMossWizardPage1 extends WizardPage {
 		//			}
 
 		((ChemblMossWizard) getWizard()).data.matrix = matrix; 
+	}
+	@Override
+	public void run(boolean fork, boolean cancelable,
+			IRunnableWithProgress runnable) throws InvocationTargetException,
+			InterruptedException {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

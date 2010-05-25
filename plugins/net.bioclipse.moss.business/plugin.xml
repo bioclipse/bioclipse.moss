@@ -1,7 +1,8 @@
 
 <?eclipse version="3.4"?>
-<plugin>
-
+<plugin>   
+      
+      
    <extension
          point="net.bioclipse.scripting.contribution">
       <scriptContribution
@@ -9,6 +10,33 @@
             id="net.bioclipse.moss.bussines.business.MossManager">
       </scriptContribution>
    </extension>
+
+ <extension
+      point = "org.eclipse.ui.newWizards">
+	<category
+	   id = "net.bioclipse.moss.business"
+	   name="Moss-Chembl">
+	</category>
+ 	<wizard
+	   id = "net.bioclipse.moss.business.chemblMoss.ui.ChemblMossWizard"
+	   name = "Moss-Chembl Wizard"
+	   project="false"
+	   class="net.bioclipse.moss.business.chemblMoss.ui.ChemblMossWizard"
+	   category="net.bioclipse.moss.business"
+	   icon="icons/sample.gif">
+   	   <description>Create a moss file with chembl compounds</description>
+	   <selection class="org.eclipse.core.resources.IResource"/>
+	</wizard>
+    </extension>      
+      
+   
+<extension
+         point="org.eclipse.ui.intro.configExtension">
+	      <configExtension
+    	        content="net.bioclipse.moss.business.chemblMoss.ui.ChemblMossAction"
+    	        configId="org.eclipse.ui.intro.universalConfig">
+	      </configExtension>
+      </extension>
    
    <extension
          point="org.eclipse.ui.popupMenus">
@@ -24,5 +52,17 @@
          </action>
       </objectContribution>
    </extension>
-   
+   
+      <extension
+         point="org.eclipse.help.contexts">
+         <contexts file="contexts.xml" />
+   </extension>
+
+<extension
+         point="org.eclipse.help.toc">
+      <toc
+            file="toc.xml"
+            primary="true"/>
+   </extension>
+     Â 
 </plugin>

@@ -19,7 +19,6 @@ public class ChemblMossWizard extends Wizard {
 	public ChemblMossWizard() {
 		super();
 		setWindowTitle("ChEMBL-MoSS");
-		
 		chembl = Activator.getDefault().getJavaChEMBLManager();
 	}
 
