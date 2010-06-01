@@ -75,10 +75,10 @@ public class ChemblMossWizardPage1 extends WizardPage implements IRunnableContex
 	@Override
 	public void createControl(Composite parent) {
 		final Composite container = new Composite(parent, SWT.NONE);
-		final GridLayout layout = new GridLayout(2, false);
+		final GridLayout layout = new GridLayout(4, false);
 		layout.marginRight = 2;
 		layout.marginLeft = 2;
-		layout.marginBottom = 2;
+		layout.marginBottom = -2;
 		layout.marginTop = 10;
 		layout.marginWidth = 2;
 		layout.marginHeight = 2;
