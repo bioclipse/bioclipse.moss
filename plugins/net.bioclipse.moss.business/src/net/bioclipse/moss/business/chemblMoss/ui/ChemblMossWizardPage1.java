@@ -39,24 +39,30 @@ import org.eclipse.ui.PlatformUI;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartFrame;
 import org.jfree.chart.JFreeChart;
+import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.data.general.DefaultPieDataset;
+import org.jfree.data.statistics.HistogramDataset;
+import org.jfree.data.xy.IntervalXYDataset;
+import org.jfree.data.xy.XYSeries;
+import org.jfree.data.xy.XYSeriesCollection;
 import org.jfree.ui.RefineryUtilities;
 public class ChemblMossWizardPage1 extends WizardPage implements IRunnableContext{
 
 	private IChEMBLManager chembl;
-	private Label label, info;
+	private Label label, info, labelLow, labelHigh;
 	private GridData gridData;
 	private Combo cbox, cboxAct;
 	private Table table;
-	private TableColumn column1;
-	private Spinner spinn;
-	private Button button, buttonb, check;
+	private TableColumn column1, column2, column3;
+	private Spinner spinn, spinnLow, spinnHigh;
+	private Button button, buttonb, check, buttonH, buttonUpdate;
 	private Text text;
+	XYSeries series;
 	public static final String PAGE_NAME = "one";
-
-	
+	IStringMatrix matrixAct;
+	private String index;
 	public ChemblMossWizardPage1(String pagename){
 		super(pagename);
 		chembl = Activator.getDefault().getJavaChEMBLManager();
