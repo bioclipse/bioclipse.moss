@@ -160,7 +160,7 @@ public class ChemblMossWizardPage1 extends WizardPage implements IRunnableContex
 
 								//Remove the old items in the combobox
 								int oldlistsize = cboxAct.getItemCount() - list.size();
-								String index = cboxAct.getText();//cboxAct.getItem(cboxAct.getSelectionIndex());
+								index = cboxAct.getText();//cboxAct.getItem(cboxAct.getSelectionIndex());
 								cboxAct.remove(0, oldlistsize-1);
 								//Adds new items to the comboboxlist
 								List<String> oldItemsList = new ArrayList<String>();
@@ -171,49 +171,50 @@ public class ChemblMossWizardPage1 extends WizardPage implements IRunnableContex
 								//New query with the given settings
 								//if(oldItemsList.contains((index))==true){
 								if(list.contains((index))==true){
+
+									spinn.setSelection(50);
 									IStringMatrix matrix, matrix2;
 									try {
-										spinn.setSelection(50);
-										matrix = chembl.MossProtFamilyCompounds(selected, index, spinn.getSelection());
+										matrix = chembl.MossProtFamilyCompoundsAct(selected, index, spinn.getSelection());
 										matrix2 = chembl.MossProtFamilyCompounds(selected,index);
 										cboxAct.setText(index);
-										info.setText("Total compund hit: "+ matrix2.getRowCount());
+										info.setText("Distinct compunds: "+ matrix2.getRowCount());
 										addToTable(matrix);
 									} catch (BioclipseException e1) {
 										// TODO Auto-generated catch block
 										e1.printStackTrace();
 									}
-								}else{
-									setErrorMessage("The activity " + index +" does not exist for the protein family " + selected + ".");
-									info.setText("Total compund hit:");
-									setPageComplete(false);
-									button.setVisible(false);
-								}
+							
+							}else{
+								setErrorMessage("The activity " + index +" does not exist for the protein family " + selected + ".");
+								info.setText("Total compund hit:");
+								setPageComplete(false);
+								
 							}
-						}else{
-							cboxAct.setItems(item);
-							cboxAct.setEnabled(true);
-						}	
-					}
-				}catch (BioclipseException e1) {
-					e1.printStackTrace();
+						}
+					}else{
+						cboxAct.setItems(item);
+						cboxAct.setEnabled(true);
+					}	
 				}
+			}catch (BioclipseException e1) {
+				e1.printStackTrace();
 			}
-		});
-
+		}
+	});
 
 		/*Returns the available compunds for the family*/
 		label = new Label(container, SWT.NONE);
 		gridData = new GridData(GridData.FILL);
 		gridData.grabExcessHorizontalSpace = true;
-		gridData.horizontalSpan = 1;
+		gridData.horizontalSpan = 2;
 		label.setLayoutData(gridData);
 		label.setText("Choose one available activity");
 
 		cboxAct = new Combo(container,SWT.READ_ONLY);
 		gridData = new GridData(GridData.FILL);
 		gridData.grabExcessHorizontalSpace = true;
-		gridData.horizontalSpan = 1;
+		gridData.horizontalSpan = 2;
 		gridData.widthHint=100;
 		String[] item = { "No available activity" };
 		cboxAct.setItems(item);
