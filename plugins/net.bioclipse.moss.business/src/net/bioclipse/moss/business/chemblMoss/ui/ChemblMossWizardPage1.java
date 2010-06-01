@@ -92,18 +92,19 @@ public class ChemblMossWizardPage1 extends WizardPage implements IRunnableContex
 		" protein family. For further information go to help. ");
 		setPageComplete(false);
 
+
 		label = new Label(container, SWT.NONE);
 		gridData = new GridData(GridData.FILL);
 		gridData.grabExcessHorizontalSpace = true;
-		gridData.horizontalSpan = 1;
+		gridData.horizontalSpan = 2;
 		label.setLayoutData(gridData);
 		label.setText("Choose Kinase Protein Familes");
 
 		cbox = new Combo(container,SWT.READ_ONLY);
 		cbox.setToolTipText("Kinase family");
-		gridData = new GridData(GridData.BEGINNING);
+		gridData = new GridData();
 		gridData.grabExcessHorizontalSpace = true;
-		gridData.horizontalSpan = 1;
+		gridData.horizontalSpan = 2;
 		gridData.widthHint=100;
 		cbox.setLayoutData(gridData);
 		String[] items = { "TK","TKL","STE","CK1","CMGC","AGC","CAMK" };
