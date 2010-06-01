@@ -9,6 +9,7 @@ import net.bioclipse.core.business.BioclipseException;
 import net.bioclipse.rdf.model.IStringMatrix;
 
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableContext;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.operation.ModalContext;
@@ -112,45 +113,26 @@ public class ChemblMossWizardPage1 extends WizardPage implements IRunnableContex
 		cbox.addSelectionListener(new SelectionAdapter(){
 			public void widgetSelected(SelectionEvent e) {
 				final String selected = cbox.getItem(cbox.getSelectionIndex());
-				
+
 				try {
 					table.clearAll();
 					table.removeAll();
 					setErrorMessage(null);
-
-//					getContainer().run(true, true, new IRunnableWithProgress() {
-//					      public void run(IProgressMonitor monitor) {
-//					    	  int sum = 10;
-//					          monitor.beginTask("Computing sum: ", sum);
-//					    	  list = chembl.MossAvailableActivities(selected);
-//					         for (int i = 0; i < sum; i++) {
-//					            monitor.subTask(Integer.toString(i));
-//					            //sleep to simulate long running operation
-//					            
-//					            Thread.sleep(100);
-//					            monitor.worked(1);
-//					         }
-//					         monitor.done();
-//					      }
-//					   });
 					List<String> list = chembl.MossAvailableActivities(selected);
 					if(list.size()>0){
 						String[] item = new String[list.size()];
 						for(int i=0;i<list.size(); i++){
 							item[i]= list.get(i);
 						}		
-
-						
 						if(cboxAct.isEnabled()){
+
 							if(cboxAct.getSelection().x == cboxAct.getSelection().y){
 								cboxAct.setItems(item);
-
 							}else{
 
 								/*EMERGENCY SOLUTION.. To solve the problem
 									that involves changing the protein family...
-								 */
-
+								 */								
 								//Brings the current activities to an array
 								String oldItems[] = cboxAct.getItems();
 								// Takes that array and makes it a list
