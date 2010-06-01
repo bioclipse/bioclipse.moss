@@ -230,99 +230,48 @@ public class ChemblMossWizardPage1 extends WizardPage implements IRunnableContex
 					table.clearAll();
 					table.removeAll();
 					spinn.setSelection(50);
-					IStringMatrix matrix = chembl.MossProtFamilyCompounds(cbox.getItem(cbox.getSelectionIndex()), selected,50);
+					check.setSelection(false);
+					spinnLow.setEnabled(false);
+					spinnHigh.setEnabled(false);
+					spinnLow.setSelection(0);
+					spinnHigh.setSelection(1000);
+					
+					//IStringMatrix matrix = chembl.MossProtFamilyCompounds(cbox.getItem(cbox.getSelectionIndex()), selected,50);
 					//IStringMatrix matrix = chembl.MossProtFamilyCompounds(cbox.getItem(cbox.getSelectionIndex()), selected, spinn.getSelection());
+
+					IStringMatrix matrix = chembl.MossProtFamilyCompoundsAct(cbox.getItem(cbox.getSelectionIndex()), selected,spinn.getSelection());
 					addToTable(matrix);
+					//Count the amount of compounds there is for one hit, i.e. same query without limit.
+					IStringMatrix matrix2 = chembl.MossProtFamilyCompounds(cbox.getItem(cbox.getSelectionIndex()),cboxAct.getItem(cboxAct.getSelectionIndex()));
+					info.setText("Distinct compounds: "+ matrix2.getRowCount());
+
+					//Query for activities. Adds them to the plot series.
+					matrixAct = chembl.MossProtFamilyCompoundsAct(cbox.getItem(cbox.getSelectionIndex()), selected);
+
+					//Adds activity to histogram series
+					series = new XYSeries("Activity for compounds");
+					for(int i = 1; i< matrixAct.getRowCount()+1;i++){
+						if( matrixAct.get(i,"actval").equals(""))series.add(0,0);	
+						else series.add( Double.parseDouble(matrixAct.get(i,"actval")), Double.parseDouble(matrixAct.get(i,"actval")));
+					}
+
 					button.setEnabled(true);
 					spinn.setEnabled(true);
-					cboxAct.setEnabled(true);
+					check.setEnabled(true);
+					//cboxAct.setEnabled(true);
+					buttonH.setEnabled(true);
 
-					
-					/*Count the amount of compounds there is for one hit,
-					 * i.e. same query without limit.
-					 * */
-					 
-					try {
-						IStringMatrix matrix2 = chembl.MossProtFamilyCompounds(cbox.getItem(cbox.getSelectionIndex()),cboxAct.getItem(cboxAct.getSelectionIndex()));
-						info.setText("Total compund hit: "+ matrix2.getRowCount());
-					} catch (BioclipseException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
 				}catch(BioclipseException e1){
 					e1.printStackTrace();
 				}
 				setPageComplete(true);
 			} 
 		});
-		check = new Button(container, SWT.CHECK);
-		check.setText("Cut-off");
-		gridData = new GridData(GridData.BEGINNING);
-		gridData.horizontalSpan = 1;
-		check.setLayoutData(gridData);
-		/*Limits the search
-		 * The users are able to limit there search or to be saved data.*/
 
-		button = new Button(container, SWT.PUSH);
-		button.setText("Histogram");
-		gridData = new GridData();
-		gridData.horizontalSpan = 1; 
-		button.setLayoutData(gridData);
-		button.addSelectionListener(new SelectionAdapter() {
-			public void widgetSelected(SelectionEvent e) {
-				
-//			    
-//				CategoryDataset data = new CategoryDataset(); 
-//				data.
-//				data.setValue("Category 1", 43.2); 
-//				data.setValue("Category 2", 27.9); 
-//				data.setValue("Category 3", 79.5); 
-//				
-//			ChartFrame c = ChartFactory.createBarChart("histogram", "","", data, true, true, true, true)
-//				 XYBarChartDemo1 xybarchartdemo1 = new XYBarChartDemo1("State Executions - USA");
-//			        xybarchartdemo1.pack();
-//			        RefineryUtilities.centerFrameOnScreen(xybarchartdemo1);
-//			        xybarchartdemo1.setVisible(true);
-//			    
-//				
-//				
-//				
-//				JFreeChart chart = ChartFactory.createPieChart(
-//				"Sample Pie Chart", data,true,true,false);
-//				
-//				ChartFrame frame = new ChartFrame("First", chart); 
-//				frame.pack(); 
-//				frame.setVisible(true);
-				
-				
-//				Shell shell = new Shell(SWT.DIALOG_TRIM | SWT.APPLICATION_MODAL);
-//				final GridLayout layout = new GridLayout(2, false);
-//				shell.setLayout(layout);
-//				text = new Text(shell, SWT.NONE);
-//				text.setText("Annzi har en bra dag");
-//				shell.pack();
-//				shell.open();
-			}
-			});
-		
-		spinn = new Spinner(container,SWT.PUSH);
-		spinn.setTextLimit(1000000);
-		spinn.setSelection(0);
-		gridData = new GridData(GridData.BEGINNING);
-		gridData.horizontalSpan = 1;
-		spinn.setLayoutData(gridData);
-		
-		spinn = new Spinner(container,SWT.PUSH);
-		spinn.setTextLimit(1000000);
-		spinn.setSelection(10000);
-		gridData = new GridData(GridData.BEGINNING);
-		gridData.horizontalSpan = 1;
-		spinn.setLayoutData(gridData);
-		
 		label = new Label(container, SWT.NONE);
-		gridData = new GridData(GridData.FILL);
+		gridData = new GridData();
 		gridData.grabExcessHorizontalSpace = true;
-		gridData.horizontalSpan = 1;
+		gridData.horizontalSpan =2;
 		label.setLayoutData(gridData);
 		label.setText("Limit");
 
