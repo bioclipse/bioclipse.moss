@@ -6,9 +6,12 @@ import net.bioclipse.chembl.business.IChEMBLManager;
 import net.bioclipse.core.business.BioclipseException;
 import org.apache.log4j.Logger;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
+import org.eclipse.ui.INewWizard;
+import org.eclipse.ui.IWorkbench;
 
-public class ChemblMossWizard extends Wizard {
+public class ChemblMossWizard extends Wizard implements INewWizard {
 
 	private static final Logger logger = Logger.getLogger(ChemblMossWizard.class);
 	private ChemblMossWizardPage1 firstpage;
@@ -62,6 +65,12 @@ public class ChemblMossWizard extends Wizard {
 			e.printStackTrace();
 		}
 		return true;
+	}
+
+	@Override
+	public void init(IWorkbench workbench, IStructuredSelection selection) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
