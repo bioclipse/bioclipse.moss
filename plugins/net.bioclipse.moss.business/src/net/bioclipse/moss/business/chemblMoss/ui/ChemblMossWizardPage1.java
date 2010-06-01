@@ -280,17 +280,255 @@ public class ChemblMossWizardPage1 extends WizardPage implements IRunnableContex
 					e1.printStackTrace();
 				}
 			}});
+
+		//Button that adds all hits to the limit
+		button = new Button(container, SWT.PUSH);
+		button.setToolTipText("Add all compounds to the table");
+		button.setText("Add all");
+		button.setEnabled(false);
+		button.setLayoutData(gridData);
+		gridData = new GridData();
+		gridData.horizontalSpan = 1;
+		button.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent e) {
+				//try {
+				table.removeAll();
+//				ProgressMonitorDialog dialog = new ProgressMonitorDialog(container.getShell());
+//				
+//				try {
+//					dialog.run(true, true, new IRunnableWithProgress(){
+//						public void run(IProgressMonitor monitor) {
+//							monitor.beginTask("Searching for compounds", IProgressMonitor.UNKNOWN);
+							try {
+								IStringMatrix matrix = chembl.MossProtFamilyCompoundsAct(cbox.getItem(cbox.getSelectionIndex()), cboxAct.getItem(cboxAct.getSelectionIndex()));
+								
+//								final IStringMatrix matrix = chembl.MossProtFamilyCompoundsAct("TK", "Ki");
+								addToTable(matrix);
+								info.setText("Total hit(not always distinct compounds): " + matrix.getRowCount());
+								spinn.setSelection(matrix.getRowCount());
+								
+							} catch (BioclipseException eb) {
+								// TODO Auto-generated catch block
+								eb.printStackTrace();
+							}
+							
+//							
+//							monitor.done();
+//						}
+//					});
+//				} catch (InvocationTargetException e1) {
+//					// TODO Auto-generated catch block
+//					e1.printStackTrace();
+//				} catch (InterruptedException e1) {
+//					// TODO Auto-generated catch block
+//					e1.printStackTrace();
+//				}
+				
+
+				//				} catch (BioclipseException e1) {
+				//					// TODO Auto-generated catch block
+				//					e1.printStackTrace();
+				//				}
+			}
+		});	
+		check = new Button(container, SWT.CHECK);
+		check.setText("Cut-off");
+		check.setToolTipText("Modify data by specifying upper and lower activity limit");
+		check.setEnabled(false);
+		gridData = new GridData(GridData.BEGINNING);
+		gridData.horizontalSpan = 1;
+		check.setLayoutData(gridData);
+		check.addSelectionListener(new SelectionAdapter() {
+
+			public void widgetSelected(SelectionEvent e) {
+				boolean selected = check.getSelection();
+				if(selected == true){
+					spinnLow.setEnabled(true);
+					spinnHigh.setEnabled(true);
+					buttonUpdate.setEnabled(true);
+					labelHigh.setEnabled(true);
+					labelLow.setEnabled(true);
+				}
+				else if(selected == false){
+					spinnLow.setEnabled(false);
+					spinnHigh.setEnabled(false);
+					buttonUpdate.setEnabled(false);	
+					labelHigh.setEnabled(false);
+					labelLow.setEnabled(false);
+				}
+			}
+		});
+		buttonUpdate = new Button(container, SWT.PUSH);
+		buttonUpdate.setText("Update table");
+		buttonUpdate.setToolTipText("Update the table with the specified activity limits");
+		buttonUpdate.setEnabled(false);
+		gridData = new GridData();
+		gridData.horizontalSpan = 1;
+		buttonUpdate.setLayoutData(gridData);
+		buttonUpdate.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent e) {
+				table.clearAll();
+				table.removeAll();
+				int cnt=0;
+
+				for(int i = 1; i< matrixAct.getRowCount()+1;i++){
+
+					if(matrixAct.get(i,"actval").contains("e")){
+
+						if(spinnHigh.getSelection() >= 1000000){
+							TableItem item= new TableItem(table, SWT.NONE);
+							item.setText(0,String.valueOf(cnt+1));
+							item.setText(2,matrixAct.get(i, "smiles"));		
+							item.setText(1,matrixAct.get(i,"actval"));
+							column1.pack();
+							column2.pack();
+							column3.pack();
+							cnt++;
+						}
+					}
+					else if( matrixAct.get(i,"actval").equals("")){
+
+						if(spinnHigh.getSelection() == 0){
+							TableItem item= new TableItem(table, SWT.NONE);
+							item.setText(0,String.valueOf(cnt+1));
+							item.setText(2,matrixAct.get(i, "smiles"));		
+							item.setText(1,matrixAct.get(i,"actval"));
+							column1.pack();
+							column2.pack();
+							column3.pack();
+							cnt++;
+						}
+					}
+					else if(Double.parseDouble(matrixAct.get(i,"actval")) >= spinnLow.getSelection() && 
+							Double.parseDouble(matrixAct.get(i,"actval")) <= spinnHigh.getSelection()){
+						//if(Double.parseDouble(matrixAct.get(i,"actval")) >= 10000 && Double.parseDouble(matrixAct.get(i,"actval")) <= 1000000){
+
+						TableItem item= new TableItem(table, SWT.NONE);
+						item.setText(0,String.valueOf(cnt+1));
+						item.setText(2,matrixAct.get(i, "smiles"));		
+						item.setText(1,matrixAct.get(i,"actval"));
+						column1.pack();
+						column2.pack();
+						column3.pack();
+						cnt++;
+					}	
+					spinn.setSelection(cnt);
+
+
+					//					if(spinnHigh.getSelection() >= 1000000 && matrixAct.get(i,"actval").contains("e") ){
+					//						System.out.print("hej1");
+					//						TableItem item= new TableItem(table, SWT.NONE);
+					//						item.setText(0,cnt+1 +" "+matrixAct.get(i, "smiles"));		
+					//						item.setText(1,matrixAct.get(i,"actval"));
+					//						column1.pack();
+					//						cnt++;
+					//					}
+					//					 if(matrixAct.get(i,"actval").contains("e")){
+					//						System.out.print(Double.parseDouble(matrixAct.get(i, "actval") + " hej2"));
+					//						}
+					//					else if(Double.parseDouble(matrixAct.get(i,"actval")) >= spinnLow.getSelection() && 
+					//							Double.parseDouble(matrixAct.get(i,"actval")) <= spinnHigh.getSelection()){
+					//						//if(Double.parseDouble(matrixAct.get(i,"actval")) >= 10000 && Double.parseDouble(matrixAct.get(i,"actval")) <= 1000000){
+					//						System.out.print("hej3");
+					//						TableItem item= new TableItem(table, SWT.NONE);
+					//						item.setText(0,cnt+1 +" "+matrixAct.get(i, "smiles"));		
+					//						item.setText(1,matrixAct.get(i,"actval"));
+					//						column1.pack();
+					//						cnt++;
+					//					}	
+
+
+
+					info.setText("Total compound hit: "+ cnt);
+				}
+			}
+		});
+		/*Limits the search
+		 * 
+		 * The users are able to limit there search or to be saved data.*/
+		buttonH = new Button(container, SWT.PUSH);
+		buttonH.setText("Histogram");
+		buttonH.setToolTipText("Shows activity in a histogram(for all compounds)");
+		buttonH.setEnabled(false);
+		gridData = new GridData();
+		gridData.horizontalSpan = 2; 
+		buttonH.setLayoutData(gridData);
+		buttonH.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent e) {		    	
+				final XYSeriesCollection dataset = new XYSeriesCollection(series);
+				JFreeChart chart = ChartFactory.createXYBarChart(
+						"Activity chart",
+						"Compounds", 
+						false,
+						"Activity value", 
+						dataset,
+						PlotOrientation.VERTICAL,
+						true,
+						true,
+						false
+				);
+				ChartFrame frame = new ChartFrame("Activities", chart); 
+				frame.pack(); 
+				frame.setVisible(true);
+			}
+		});	
+		
+		labelLow = new Label(container, SWT.NONE);
+		labelLow.setText("Lower activity limit");
+		labelLow.setEnabled(false);
+		gridData = new GridData();
+		gridData.horizontalSpan = 1;
+		labelLow.setLayoutData(gridData);
+
+		spinnLow = new Spinner(container,SWT.NONE);
+		spinnLow.setSelection(0);
+		spinnLow.setMaximum(10000000);
+		spinnLow.setIncrement(50);
+		spinnLow.setEnabled(false);
+		spinnLow.setToolTipText("Specify lower activity limit");
+		gridData = new GridData();
+		gridData.widthHint=100;
+		gridData.horizontalSpan = 1;
+		spinnLow.setLayoutData(gridData);
+		spinnLow.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent e) {
+//				int selected = spinnLow.getSelection();
+
+			}});
+		labelHigh = new Label(container, SWT.NONE);
+		labelHigh.setText("Upper activity limit");
+		labelHigh.setEnabled(false);
+		gridData = new GridData();
+		gridData.horizontalSpan = 1;
+		labelHigh.setLayoutData(gridData);
+
+		spinnHigh = new Spinner(container,SWT.BORDER);
+		spinnHigh.setSelection(1000);
+		spinnHigh.setMaximum(1000000000);
+		spinnHigh.setIncrement(50);
+		spinnHigh.setEnabled(false);
+		spinnHigh.setToolTipText("Specify upper activity limit");
+		gridData = new GridData();
+		gridData.widthHint=100;
+		gridData.horizontalSpan = 1;
+		spinnHigh.setLayoutData(gridData);
+		spinnHigh.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent e) {
+//				int selected = spinnHigh.getSelection();
+
+			}});
+
+
 		info = new Label(container, SWT.NONE);
 		gridData = new GridData();
 		info.setLayoutData(gridData);
-		gridData.horizontalSpan = 2;
-		gridData.widthHint = 400;
+		gridData.horizontalSpan = 4;
+		gridData.widthHint = 350;
 		info.setText("Total compound hit:" );
 
 		table = new Table(container, SWT.BORDER );
 		table.setHeaderVisible(true);
 		table.setLinesVisible(true);
-		//		table.setVisible(false);
 		gridData = new GridData();
 		gridData.horizontalAlignment = GridData.FILL;
 		gridData.verticalAlignment = GridData.FILL;
