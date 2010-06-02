@@ -27,6 +27,7 @@ import net.bioclipse.core.TestMethods;
 import net.bioclipse.core.business.BioclipseException;
 
 import net.bioclipse.managers.business.IBioclipseManager;
+import net.bioclipse.moss.business.props.MossProperties;
 import net.bioclipse.rdf.model.IStringMatrix;
 
 @PublishedClass(
@@ -37,10 +38,17 @@ public interface IMossManager extends IBioclipseManager {
 	
 	@Recorded
 	@PublishedMethod(
+		methodSummary = "Creates a new MoSS run properties object."
+	)
+	public MossProperties createMoSSProperties();
+
+	@Recorded
+	@PublishedMethod(
 			params = "String fileName, List family",
 			methodSummary = "Saves moss file from SPARQL query" )
 			public void saveMoss(String fileName, List<ArrayList<String>> fam1)
 	throws BioclipseException, IOException ;
+
 	@Recorded
 	@PublishedMethod(
 			params = "String fileName, List fam1,  List fam2",

@@ -24,6 +24,7 @@ import net.bioclipse.managers.business.IBioclipseManager;
 import net.bioclipse.moss.business.backbone.MossBean;
 import net.bioclipse.moss.business.backbone.MossModel;
 import net.bioclipse.moss.business.backbone.MossRunner;
+import net.bioclipse.moss.business.props.MossProperties;
 import net.bioclipse.rdf.Activator;
 import net.bioclipse.rdf.business.IJavaRDFManager;
 import net.bioclipse.rdf.model.IStringMatrix;
@@ -260,6 +261,9 @@ public class MossManager implements IBioclipseManager {
 		return filename;
 	};
 
+	public MossProperties createMoSSProperties() {
+		return new MossProperties();
+	}
 
 	private void setMossModel(MossModel mossmodel){
 		mossmodel.setMinimalSupport(mossbean.getMinimalSupport());
