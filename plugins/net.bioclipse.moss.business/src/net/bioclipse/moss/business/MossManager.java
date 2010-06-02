@@ -15,22 +15,23 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.script.ScriptException;
+
 import net.bioclipse.core.ResourcePathTransformer;
 import net.bioclipse.core.business.BioclipseException;
 import net.bioclipse.managers.business.IBioclipseManager;
 import net.bioclipse.moss.business.backbone.MossBean;
 import net.bioclipse.moss.business.backbone.MossModel;
 import net.bioclipse.moss.business.backbone.MossRunner;
+import net.bioclipse.rdf.Activator;
+import net.bioclipse.rdf.business.IJavaRDFManager;
+import net.bioclipse.rdf.model.IStringMatrix;
+
 import org.apache.log4j.Logger;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
-
-import net.bioclipse.rdf.Activator;
-import net.bioclipse.rdf.model.IStringMatrix;
-import net.bioclipse.rdf.business.IJavaRDFManager;
-import net.bioclipse.rdf.business.IRDFManager;
 
 public class MossManager implements IBioclipseManager {
 	
