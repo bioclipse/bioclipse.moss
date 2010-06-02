@@ -40,9 +40,11 @@ public interface IMossManager extends IBioclipseManager {
 	@PublishedMethod(
 		params="String json",
 		methodSummary = "Creates a new MoSS run properties object given the " +
-			"parameters given in JSON."
+			"parameters given in JSON. Throws an BioclipseException if the " +
+			"passed JSON is invalid."
 	)
-	public MossProperties createMoSSProperties(String json);
+	public MossProperties createMoSSProperties(String json)
+	throws BioclipseException;
 
 	@Recorded
 	@PublishedMethod(
