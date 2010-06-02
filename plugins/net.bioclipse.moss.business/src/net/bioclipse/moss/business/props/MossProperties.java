@@ -10,13 +10,18 @@
  */
 package net.bioclipse.moss.business.props;
 
+import java.io.StringWriter;
+
+import net.bioclipse.core.business.BioclipseException;
+
+import org.codehaus.jackson.map.ObjectMapper;
+
 /**
  * Class to store MoSS properties. It allows properties to be serialized as
  * JSON, and an object instantiated from a JSON representation.
  *
  * @author egonw
  */
-@SuppressWarnings("serial")
 public class MossProperties {
 
     private double minimalSupport;
@@ -77,11 +82,29 @@ public class MossProperties {
 		return "";
 	}
 
+	public String toString() {
+		try {
+			return toJSON();
+		} catch (BioclipseException exception) {
+			return exception.getMessage();
+		}
+	}
+	
 	/**
 	 * Returns a JSON representation of the properties in this model.
 	 */
-	public String toString() {
-		return "";
+	public String toJSON() throws BioclipseException {
+		ObjectMapper mapper = new ObjectMapper();
+		StringWriter writer = new StringWriter();
+		try {
+			mapper.writeValue(writer, this);
+		} catch (Exception exception) {
+			throw new BioclipseException(
+				"Error while creating JSON: " + exception.getMessage(),
+				exception
+			);
+		}
+		return writer.toString();
 	}
 
     public double getMinimalSupport() {
