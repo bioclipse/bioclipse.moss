@@ -29,6 +29,10 @@ The Eclipse Public License accompanies this distribution, and is available at ht
       <discovery label="MoSS Homepage" url="http://www.borgelt.net/doc/moss/moss.html"/>
    </url>
 
+   <includes
+         id="net.bioclipse.data.moss_feature"
+         version="0.0.0"/>
+
    <requires>
       <import feature="net.bioclipse.chemoinformatics_feature" version="2.2.0.RC3" match="greaterOrEqual"/>
    </requires>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+
+   <extension
+      point = "org.eclipse.ui.newWizards">
+ 	<wizard
+	   id = "net.bioclipse.data.moss.wizards.NewMossProjectWizard"
+	   name = "New Example MoSS Files Project"
+	   project="true"
+	   class="net.bioclipse.data.wizards.NewDataProjectWizard"
+	   category="net.bioclipse.data"
+	   icon="icons/moss.gif">
+   	   <description>Install a Project with example MoSS files.</description>
+	   <selection class="org.eclipse.core.resources.IResource"/>
+	</wizard>
+</extension>
+
+  <extension
+      point="net.bioclipse.data.install">
+      <folder 
+      	name="Example MoSS Files"
+      	description="Example MoSS input and output files."
+      	location="data/MoSS"
+      	wizard="net.bioclipse.data.moss.wizards.NewMossProjectWizard"
+  	    icon="icons/moss.gif"/>
+  </extension>
+
+</plugin>

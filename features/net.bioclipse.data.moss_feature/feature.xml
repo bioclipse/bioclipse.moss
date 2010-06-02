@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature
+      id="net.bioclipse.data.moss_feature"
+      label="Example MoSS Files Feature"
+      version="2.4.0.RC1"
+      provider-name="The Bioclipse Team"
+      plugin="net.bioclipse.data.moss">
+
+   <description>
+      Example MoSS Input and Output Files Feature.
+   </description>
+
+   <copyright>
+      Copyright (C) 2010  Egon Willighagen
+   </copyright>
+
+   <license>
+      Creative Commons Zero.
+   </license>
+
+   <url>
+      <update label="Bioclipse Update Site" url="http://update2.bioclipse.net"/>
+   </url>
+
+   <requires>
+      <import feature="net.bioclipse.core_feature" version="2.4.0.RC1"/>
+   </requires>
+
+   <plugin
+         id="net.bioclipse.data.moss"
+         download-size="1024"
+         install-size="13500"
+         version="0.0.0"
+         unpack="false"/>
+
+</feature>

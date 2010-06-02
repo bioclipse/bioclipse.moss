@@ -1,0 +1,17 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Example MoSS Files
+Bundle-SymbolicName: net.bioclipse.data.moss;singleton:=true
+Bundle-Version: 2.4.0.RC1
+Bundle-Activator: net.bioclipse.data.moss.Activator
+Bundle-Vendor: The Bioclipse Team
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime,
+ org.eclipse.core.resources,
+ org.eclipse.ui.ide,
+ org.eclipse.ui.forms,
+ net.bioclipse.core,
+ net.bioclipse.ui,
+ net.bioclipse.data;bundle-version="2.0.0"
+Eclipse-LazyStart: true
+Import-Package: org.apache.log4j
