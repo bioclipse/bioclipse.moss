@@ -1,5 +1,5 @@
 	
-	<?eclipse version="3.4"?>
+<?eclipse version="3.4"?>
 	<plugin>      
 	   <extension
 	         point="net.bioclipse.scripting.contribution">
@@ -22,6 +22,7 @@
 		   class="net.bioclipse.moss.business.chemblMoss.ui.ChemblMossWizard"
 		   category="net.bioclipse.moss.business"
 		   icon="icons/steroid_a.png">
+		   
 	   	   <description>Create a moss file with chembl compounds</description>
 		   <selection class="org.eclipse.core.resources.IResource"/>
 		</wizard>
