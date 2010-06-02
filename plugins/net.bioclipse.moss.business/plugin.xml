@@ -8,50 +8,7 @@
 	            id="net.bioclipse.moss.bussines.business.MossManager">
 	      </scriptContribution>
 	   </extension>
-	
-	 <extension
-	      point = "org.eclipse.ui.newWizards">
-		<category
-		   id = "net.bioclipse.moss.business"
-		   name="Moss-Chembl">
-		</category>
-	 	<wizard
-		   id = "net.bioclipse.moss.business.chemblMoss.ui.ChemblMossWizard"
-		   name = "Moss-Chembl Wizard"
-		   project="false"
-		   class="net.bioclipse.moss.business.chemblMoss.ui.ChemblMossWizard"
-		   category="net.bioclipse.moss.business"
-		   icon="icons/steroid_a.png">
 		   
-	   	   <description>Create a moss file with chembl compounds</description>
-		   <selection class="org.eclipse.core.resources.IResource"/>
-		</wizard>
-	    </extension>      
-	      
-	   
-	<extension
-	         point="org.eclipse.ui.intro.configExtension">
-		      <configExtension
-	    	        content="net.bioclipse.moss.business.chemblMoss.ui.ChemblMossAction"
-	    	        configId="org.eclipse.ui.intro.universalConfig">
-		      </configExtension>
-	      </extension>
-	   
-	   <extension
-	         point="org.eclipse.ui.popupMenus">
-	      <objectContribution
-	            objectClass="org.eclipse.core.resources.IProject"
-	            id="net.bioclipse.moss.business.chemblMoss.ui.contribution1">
-	         <action
-	               label="ChEMBL-moss"
-	               icon="icons/logo_chembl.png"
-	               class="net.bioclipse.moss.business.chemblMoss.ui.ChemblMossAction"
-	               menubarPath="additions"
-	               id="net.bioclipse.chembl.business.ChEMBLManager">
-	         </action>
-	      </objectContribution>
-	   </extension>
-	   
 	      <extension
 	         point="org.eclipse.help.contexts">
 	         <contexts file="contexts.xml" />
