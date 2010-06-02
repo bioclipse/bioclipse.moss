@@ -27,4 +27,25 @@
       </toc>
    </extension>
 
+  <extension point="org.eclipse.core.contenttype.contentTypes">
+    <content-type base-type="org.eclipse.core.runtime.text"
+      id="net.bioclipse.contenttypes.moss.input"
+      name="MoSS Input File"
+      file-extensions="mossinput"
+      priority="normal">
+    </content-type>
+    <content-type base-type="org.eclipse.core.runtime.text"
+      id="net.bioclipse.contenttypes.moss.output"
+      name="MoSS Output File"
+      file-extensions="mossoutput"
+      priority="normal">
+    </content-type>
+    <content-type base-type="org.eclipse.core.runtime.text"
+      id="net.bioclipse.contenttypes.moss.output.index"
+      name="MoSS Output Index File"
+      file-extensions="mossoutputindex"
+      priority="normal">
+    </content-type>
+  </extension>
+
 </plugin>
