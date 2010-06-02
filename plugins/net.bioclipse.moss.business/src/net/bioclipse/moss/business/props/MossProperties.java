@@ -1,4 +1,5 @@
 /* Copyright (c) 2010  Egon Willighagen <egonw@users.sf.net>
+ *               2010  Annsofie Andersson <annzi.andersson@gmail.com>
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -9,10 +10,6 @@
  */
 package net.bioclipse.moss.business.props;
 
-import java.security.InvalidParameterException;
-import java.util.HashMap;
-import java.util.Map;
-
 /**
  * Class to store MoSS properties. It allows properties to be serialized as
  * JSON, and an object instantiated from a JSON representation.
@@ -22,24 +19,38 @@ import java.util.Map;
 @SuppressWarnings("serial")
 public class MossProperties {
 
-	public enum Types {
-		FOO
-	}
+    private double minimalSupport;
+    private double maximalsupport;
+    private double threshold;
+    private boolean split, closed;
+    private String exNode, exSeed, seed;
+    private int minEmbed, maxEmbed;
+    private double Limits;
+    private int mbond, mrgbd;
+    private int matom, mrgat;
+    private int maxRing, minRing;
+    private int mode;
+    private int maxEmbMemory;
+    private String path, pathId, namefile, namefileId;
 	
-	private Map<Types,Object> properties;
-
-	// IMPORTANT: each Types enumeration value *must* have a default.
-	private Map<Types,Object> defaults = new HashMap<Types, Object>() {{
-		put(Types.FOO, "foo");
-	}};
-
 	/**
 	 * Creates a new properties object with default settings. These are
 	 * expected to be modified in actual use.
 	 */
 	public MossProperties() {
-		// as long as the getProperty() methods properly returns the default
-		// value for unset properties, I do not have to do anything here
+        setMinimalSupport(0.1);
+        setMaximalsupport(0.02);
+        setThreshold(0.5);
+        setSplit(false);
+        setClosed(true);
+        setExNode("H");
+        setExSeed("");
+        setSeed("");
+        setMaxEmbed(0);
+        setMinEmbed(1);
+        setMaxRing(0);
+        setMinRing(0);
+        setMaxEmbMemory(0);
 	}
 	
 	/**
@@ -55,40 +66,6 @@ public class MossProperties {
 		);
 	}
 
-	/**
-	 * Returns the value of some property.
-	 *
-	 * @param  type A value of the {@link Types} enumeration.
-	 * @return      the {@link Object} value for this property.
-	 */
-	public Object getProperty(Types type) {
-		if (defaults.containsKey(type))
-			throw new InvalidParameterException(
-				"This property is not registered yet. Please file a bug report."
-			);
-		if (properties.containsKey(type))
-			return properties.get(type);
-		return defaults.get(type);
-	}
-
-	/**
-	 * Sets a new property value for this object.
-	 *
-	 * @param type  A value of the {@link Types} enumeration.
-	 * @param value the {@link Object} value for this property.
-	 */
-	public void setProperty(Types type, Object value) {
-		if (defaults.containsKey(type))
-			throw new InvalidParameterException(
-				"This property is not registered yet. Please file a bug report."
-			);
-		if (defaults.get(type).equals(value)) {
-			// removing the value, as it is identical to the default
-			properties.remove(type);
-		}
-		properties.put(type, value);
-	}
-	
 	/**
 	 * Lists the differences between this and the given other properties. The
 	 * returned String is not meant to be machine-readable.
@@ -106,6 +83,192 @@ public class MossProperties {
 	public String toString() {
 		return "";
 	}
+
+    public double getMinimalSupport() {
+        return minimalSupport;
+    }
+
+    public void setMinimalSupport(double minimalSupport) {
+        this.minimalSupport = minimalSupport;
+    }
+
+    public double getMaximalSupport() {
+        return maximalsupport;
+    }
+
+    public void setMaximalsupport(double maximalsupport) {
+        this.maximalsupport = maximalsupport;
+    }
+
+    public double getThreshold() {
+        return threshold;
+    }
+
+    public void setThreshold(double threshold) {
+        this.threshold = threshold;
+    }
+
+    public boolean getSplit() {
+        return split;
+    }
+
+    public void setSplit(boolean split) {
+        this.split = split;
+    }
+
+    public String getExNode() {
+        return exNode;
+    }
+
+    public void setExNode(String exnode) {
+        exNode = exnode;
+
+    }
+
+    public String getExSeed() {
+        return exSeed;
+    }
+
+    public void setExSeed(String exseed) {
+        exSeed = exseed;
+    }
+
+    public int getMaxEmbed() {
+        return maxEmbed;
+    }
+
+    public void setMaxEmbed(int maximalEmbed) {
+        maxEmbed = maximalEmbed;
+    }
+
+    public int getMinEmbed() {
+        return minEmbed;
+    }
+
+    public void setMinEmbed(int minimalEmbed) {
+        this.minEmbed = minimalEmbed;
+    }
+
+    public double getLimits() {
+        return Limits;
+    }
+
+    public void setLimits(double minsupp, double maxsupp) {
+        minimalSupport = minsupp;
+        maximalsupport = maxsupp;
+    }
+
+    public int getMbond() {
+        return mbond;
+    }
+
+    public void setMbond(int mbond) {
+        this.mbond = mbond;
+    }
+
+    public int getMrgbd() {
+        return mrgbd;
+    }
+
+    public void setMrgbd(int mrgbd) {
+        this.mrgbd = mrgbd;
+    }
+
+    public int getMaxRing() {
+        return maxRing;
+    }
+
+    public void setMaxRing(int maxRing) {
+        this.maxRing = maxRing;
+    }
+
+    public int getMinRing() {
+        return minRing;
+    }
+
+    public int getMatom() {
+        return matom;
+    }
+
+    public void setMatom(int matom) {
+        this.matom = matom;
+    }
+
+    public void setMinRing(int minRing) {
+        this.minRing = minRing;
+    }
+
+    public boolean getClosed() {
+        return closed;
+    }
+
+    public void setClosed(boolean closed) {
+        this.closed = closed;
+    }
+
+    public int getMrgat() {
+        return mrgat;
+    }
+
+    public void setMrgat(int mrgat) {
+        this.mrgat = mrgat;
+    }
+
+    public int getMode() {
+        return mode;
+    }
+
+    public void setMode(int mode) {
+        this.mode = mode;
+    }
+
+    public int getMaxEmbMemory() {
+        return maxEmbMemory;
+    }
+
+    public void setMaxEmbMemory(int maxEmbMemory) {
+        this.maxEmbMemory = maxEmbMemory;
+    }
+
+    public String getSeed() {
+        return seed;
+    }
+
+    public void setSeed(String seed) {
+        this.seed = seed;
+    }
+
+    public String getPath() {
+        return path;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
+    }
+
+    public String getPathId() {
+        return pathId;
+    }
+
+    public void setPathId(String pathId) {
+        this.pathId = pathId;
+    }
+
+    public String getNamefile() {
+        return namefile;
+    }
+
+    public void setNamefile(String namefile) {
+        this.namefile = namefile;
+    }
+
+    public String getNamefileId() {
+        return namefileId;
+    }
+
+    public void setNamefileId(String namefileId) {
+        this.namefileId = namefileId;
+    }
 }
 
 
