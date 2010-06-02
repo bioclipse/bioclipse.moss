@@ -11,21 +11,15 @@
 package net.bioclipse.moss.business;
 
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.script.ScriptException;
 
-import org.eclipse.core.resources.IFile;
-import org.eclipse.core.runtime.IProgressMonitor;
-
 import net.bioclipse.core.PublishedClass;
 import net.bioclipse.core.PublishedMethod;
 import net.bioclipse.core.Recorded;
-import net.bioclipse.core.TestMethods;
 import net.bioclipse.core.business.BioclipseException;
-
 import net.bioclipse.managers.business.IBioclipseManager;
 import net.bioclipse.moss.business.props.MossProperties;
 import net.bioclipse.rdf.model.IStringMatrix;
@@ -41,6 +35,14 @@ public interface IMossManager extends IBioclipseManager {
 		methodSummary = "Creates a new MoSS run properties object."
 	)
 	public MossProperties createMoSSProperties();
+
+	@Recorded
+	@PublishedMethod(
+		params="String json",
+		methodSummary = "Creates a new MoSS run properties object given the " +
+			"parameters given in JSON."
+	)
+	public MossProperties createMoSSProperties(String json);
 
 	@Recorded
 	@PublishedMethod(

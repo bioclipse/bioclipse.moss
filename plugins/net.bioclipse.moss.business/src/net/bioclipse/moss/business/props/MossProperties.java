@@ -10,6 +10,7 @@
  */
 package net.bioclipse.moss.business.props;
 
+import java.io.StringReader;
 import java.io.StringWriter;
 
 import net.bioclipse.core.business.BioclipseException;
@@ -30,7 +31,6 @@ public class MossProperties {
     private boolean split, closed;
     private String exNode, exSeed, seed;
     private int minEmbed, maxEmbed;
-    private double Limits;
     private int mbond, mrgbd;
     private int matom, mrgat;
     private int maxRing, minRing;
@@ -44,7 +44,7 @@ public class MossProperties {
 	 */
 	public MossProperties() {
         setMinimalSupport(0.1);
-        setMaximalsupport(0.02);
+        setMaximalSupport(0.02);
         setThreshold(0.5);
         setSplit(false);
         setClosed(true);
@@ -65,10 +65,18 @@ public class MossProperties {
 	 *
 	 * @param serialization JSON representation of the properties.
 	 */
-	public MossProperties(String serialization) {
-		throw new IllegalAccessError(
-			"To be implemented"
-		);
+	public static MossProperties createMossProperties(String serialization)
+	throws BioclipseException {
+		ObjectMapper mapper = new ObjectMapper();
+		StringReader reader = new StringReader(serialization);
+		try {
+			return mapper.readValue(reader, MossProperties.class);
+		} catch (Exception exception) {
+			throw new BioclipseException(
+				"Error while reading JSON: " + exception.getMessage(),
+				exception
+			);
+		}
 	}
 
 	/**
@@ -119,7 +127,7 @@ public class MossProperties {
         return maximalsupport;
     }
 
-    public void setMaximalsupport(double maximalsupport) {
+    public void setMaximalSupport(double maximalsupport) {
         this.maximalsupport = maximalsupport;
     }
 
@@ -170,15 +178,6 @@ public class MossProperties {
 
     public void setMinEmbed(int minimalEmbed) {
         this.minEmbed = minimalEmbed;
-    }
-
-    public double getLimits() {
-        return Limits;
-    }
-
-    public void setLimits(double minsupp, double maxsupp) {
-        minimalSupport = minsupp;
-        maximalsupport = maxsupp;
     }
 
     public int getMbond() {

@@ -264,17 +264,22 @@ public class MossManager implements IBioclipseManager {
 	public MossProperties createMoSSProperties() {
 		return new MossProperties();
 	}
+	
+	public MossProperties createMoSSProperties(String json)
+	throws BioclipseException {
+		return MossProperties.createMossProperties(json);
+	}
 
 	private void setMossModel(MossModel mossmodel){
 		mossmodel.setMinimalSupport(mossbean.getMinimalSupport());
-		mossmodel.setMaximalsupport(mossbean.getMaximalSupport());
+		mossmodel.setMaximalSupport(mossbean.getMaximalSupport());
 		mossmodel.setThreshold(mossbean.getThreshold());
 		mossmodel.setExNode(mossbean.getExNode());
 		mossmodel.setExSeed(mossbean.getExSeed());
 		mossmodel.setSeed(mossbean.getSeed());
 		mossmodel.setMinRing(mossbean.getMinRing());
 		mossmodel.setMaxRing(mossbean.getMaxRing());
-		mossmodel.setMaxEmbMemory(mossbean.getMaxEmbed());
+		mossmodel.setMaxEmbMemory(mossbean.getMaxEmbMemory());
 		mossmodel.setMbond(mossbean.getMbond());
 		mossmodel.setMrgbd(mossbean.getMrgbd());
 		mossmodel.setMatom(mossbean.getMatom());
