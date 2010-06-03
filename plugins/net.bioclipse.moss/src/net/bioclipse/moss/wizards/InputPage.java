@@ -3,12 +3,11 @@
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
- * www.eclipse.org—epl-v10.html <http://www.eclipse.org/legal/epl-v10.html>
+ * www.eclipse.org/epl-v10.html <http://www.eclipse.org/legal/epl-v10.html>
  * 
  * Contributors:
  *     Ola Spjuth - initial API and implementation
  *     Annzi
- *     
  ******************************************************************************/
 
 package net.bioclipse.moss.wizards;
@@ -143,7 +142,7 @@ public class InputPage extends WizardPage {
         label.setLayoutData(labelData);
 
         final Text txtoutputFile = new Text(container, SWT.BORDER);
-        txtoutputFile.setText("MossOutput.txt");
+        txtoutputFile.setText("example.mossoutput");
 
         txtoutputFile.addModifyListener(new ModifyListener() {
 
@@ -193,7 +192,7 @@ public class InputPage extends WizardPage {
         labelId.setLayoutData(labelIdData);
 
         final Text txtIdOutputFile = new Text(container, SWT.BORDER);
-        txtIdOutputFile.setText("MossOutputId.txt");
+        txtIdOutputFile.setText("example.mossoutputindex");
 
         txtIdOutputFile.addModifyListener(new ModifyListener() {
 
