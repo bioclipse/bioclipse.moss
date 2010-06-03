@@ -6,6 +6,7 @@
          point="org.eclipse.ui.popupMenus">
       <objectContribution
             objectClass="org.eclipse.core.resources.IFile"
+            nameFilter="*.mossinput"
             id="net.bioclipse.moss.contribution1">
          <action
                label="Moss"
@@ -16,7 +17,7 @@
          </action>
       </objectContribution>
    </extension>
-   
+
    <extension
          id="preferenceCustomization"
          name="preference.ini"
