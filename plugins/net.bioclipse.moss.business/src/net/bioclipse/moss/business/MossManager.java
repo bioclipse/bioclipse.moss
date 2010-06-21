@@ -336,7 +336,75 @@ while(i<name.size()){
 return names; 
 
 }
-	*/
+	 */
+
+
+	public void FocusComplementSet(IFile infiles,IFile outfile,IProgressMonitor monitor) 
+	throws BioclipseException, IOException{
+		File infile = new File(infiles.getLocationURI());
+		BufferedReader br = new BufferedReader(new FileReader(infile));
+		ByteArrayOutputStream out = new ByteArrayOutputStream();
+		String line = null;
+		String[]split;
+		String string=null;
+		if (outfile.exists()) {
+			throw new BioclipseException("File already exists!");
+		}
+		
+		if (monitor == null)
+			monitor = new NullProgressMonitor();
+			monitor.beginTask("Writing file", 100);
+		
+			try {
+			while((line=br.readLine())!=null){
+				split= line.split(",");
+				try {
+					if(split[0].contains("A")){string = split[0]+",0,"+split[2]+"\n";}
+					else if(split[0].contains("B")){string = split[0]+",1,"+split[2]+"\n";}
+					
+					byte but[]= string.getBytes();
+					out.write(but); 
+					
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+			
+			out.close();
+			outfile.create(
+					new ByteArrayInputStream(out.toByteArray()),
+					false,
+					monitor
+			);
+		}
+		catch (Exception e) {
+			monitor.worked(100);
+			monitor.done();
+			throw new BioclipseException("Error while writing moss file.", e);
+		} 
+
+		monitor.worked(100);
+		monitor.done();
+		
+//		BufferedReader br = new BufferedReader(new FileReader(file));
+//		
+//		FileWriter fstream = new FileWriter(ut);
+//	    BufferedWriter out = new BufferedWriter(fstream);
+//		String line = null;
+//		String[]split;
+//		while((line=br.readLine())!=null){
+//			split= line.split(",");
+//			try {
+//				if(split[0].contains("A")){out.write(split[0]+",1, "+split[2]+"\n");}
+//				else if(split[0].contains("B")){out.write(split[0]+", 0, "+split[2]+"\n");}
+//			} catch (IOException e) {
+//				e.printStackTrace();
+//			}
+//		}
+//		out.close();
+//		br.close();
+//		
+	}
 }
 
 

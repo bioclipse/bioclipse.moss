@@ -126,4 +126,11 @@ public interface IMossManager extends IBioclipseManager {
 			methodSummary = "Shows value of settings" )
 			public String parameterValues() throws Exception;
 
+	@Recorded
+	@PublishedMethod(
+			params = "IFile fileName IFile fileOutName",
+			methodSummary = "Divide a file into focus and complement. Creates a new file" )
+	public void FocusComplementSet(String file,String outFile) throws IOException;
+
+
 }
