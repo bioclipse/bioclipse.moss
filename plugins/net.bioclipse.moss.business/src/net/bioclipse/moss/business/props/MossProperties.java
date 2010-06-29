@@ -13,6 +13,9 @@ package net.bioclipse.moss.business.props;
 import java.io.StringReader;
 import java.io.StringWriter;
 
+import moss.Atoms;
+import moss.Bonds;
+import moss.Miner;
 import net.bioclipse.core.business.BioclipseException;
 
 import org.codehaus.jackson.map.ObjectMapper;
@@ -37,25 +40,51 @@ public class MossProperties {
     private int mode;
     private int maxEmbMemory;
     private String path, pathId, namefile, namefileId;
+	private String ringExtension, extPrune;
+	private String aromatic, ignoreBond;
+	public String ignoreTypeOfAtoms, matchChargeOfAtoms, matchAromaticityAtoms ;
+	private boolean canonic, equiv, unembedSibling, kekuleRepresentation, carbonChainLength;
 	
+
 	/**
 	 * Creates a new properties object with default settings. These are
 	 * expected to be modified in actual use.
 	 */
 	public MossProperties() {
-        setMinimalSupport(0.1);
-        setMaximalSupport(0.02);
+		setMinimalSupport(10);
+        setMaximalSupport(2);
         setThreshold(0.5);
         setSplit(false);
         setClosed(true);
         setExNode("H");
+        setExtPrune("none");
         setExSeed("");
+        
         setSeed("");
         setMaxEmbed(0);
         setMinEmbed(1);
         setMaxRing(0);
         setMinRing(0);
         setMaxEmbMemory(0);
+        setRingExtension("none");
+        setKekule(true);
+        setCarbonChainLength(false);
+        
+        setAromatic("never");
+        setIgnoreBond("never");
+        setCanonic(true);
+        setEquiv(false);
+        setUnembedSibling(false);
+        setIgnoreTypeOfAtoms("never");
+        setMatchChargeOfAtoms("no match");
+        setMatchAromaticityAtoms("no match");
+        
+        setMbond(Bonds.BONDMASK);
+        setMrgbd(Bonds.BONDMASK);
+        setMatom(Atoms.ELEMMASK);
+        setMrgat(Atoms.ELEMMASK);
+        setMode(Miner.DEFAULT);
+        
 	}
 	
 	/**
@@ -291,6 +320,100 @@ public class MossProperties {
     public void setNamefileId(String namefileId) {
         this.namefileId = namefileId;
     }
+    
+    public String getRingExtension() {
+		return ringExtension;
+	}
+
+	public void setRingExtension(String ringExtension) {
+		this.ringExtension = ringExtension;
+	}
+
+	public boolean getKekule() {
+		return kekuleRepresentation;
+	}
+
+	public void setKekule(boolean kekule) {
+		kekuleRepresentation = kekule;
+	}
+
+	public boolean getCarbonChainLength() {
+		return carbonChainLength;
+	}
+
+	public void setCarbonChainLength(boolean carbonChainLength) {
+		this.carbonChainLength = carbonChainLength;
+	}
+
+	public String getExtPrune() {
+		return extPrune;
+	}
+
+	public void setExtPrune(String extPrune) {
+		this.extPrune = extPrune;
+	}
+	public String getAromatic() {
+		return aromatic;
+	}
+
+	public void setAromatic(String aromatic) {
+		this.aromatic = aromatic;
+	}
+
+	public String getIgnoreBond() {
+		return ignoreBond;
+	}
+
+	public void setIgnoreBond(String ignoreBond) {
+		this.ignoreBond = ignoreBond;
+	}
+	public boolean getCanonic() {
+		return canonic;
+	}
+
+	public void setCanonic(boolean canonic) {
+		this.canonic = canonic;
+	}
+
+	public boolean getEquiv() {
+		return equiv;
+	}
+
+	public void setEquiv(boolean equiv) {
+		this.equiv = equiv;
+	}
+
+	public boolean getUnembedSibling() {
+		return unembedSibling;
+	}
+
+	public void setUnembedSibling(boolean unembedSibling) {
+		this.unembedSibling = unembedSibling;
+	}
+	public String getIgnoreTypeOfAtoms() {
+		return ignoreTypeOfAtoms;
+	}
+
+	public void setIgnoreTypeOfAtoms(String ignoreTypeOfAtoms) {
+		this.ignoreTypeOfAtoms = ignoreTypeOfAtoms;
+	}
+
+	public String getMatchChargeOfAtoms() {
+		return matchChargeOfAtoms;
+	}
+
+	public void setMatchChargeOfAtoms(String matchChargeOfAtoms) {
+		this.matchChargeOfAtoms = matchChargeOfAtoms;
+	}
+
+	public String getMatchAromaticityAtoms() {
+		return matchAromaticityAtoms;
+	}
+
+	public void setMatchAromaticityAtoms(String matchAromaticityAtoms) {
+		this.matchAromaticityAtoms = matchAromaticityAtoms;
+	}
+
 }
 
 

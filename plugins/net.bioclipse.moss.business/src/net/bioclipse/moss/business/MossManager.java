@@ -10,14 +10,26 @@
  */
 package net.bioclipse.moss.business;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.script.ScriptException;
 
+import moss.Atoms;
+import moss.Bonds;
+import moss.Miner;
 import net.bioclipse.core.ResourcePathTransformer;
 import net.bioclipse.core.business.BioclipseException;
 import net.bioclipse.managers.business.IBioclipseManager;
@@ -35,201 +47,71 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 
 public class MossManager implements IBioclipseManager {
-	
+
 	private IJavaRDFManager rdf = Activator.getDefault().getJavaManager();
 	private static final Logger logger = Logger.getLogger(MossManager.class);
-	
-	/**A bean that sets the parameters
-	 * Parameters: propertyName, Object values
-	 * */
-	MossBean mossbean = new MossBean();
-	public String createParameters(String propertyName, Object value) throws Exception{
-		//	if(propertyName.equals("matom")||propertyName.equals("mbond")||propertyName.equals("mrgat")||propertyName.equals("mrgbd")){
-			//	return "Not allowed to set value to " + propertyName+ ", internal proerty.";
-			//}
-			//else{
-				if(value.getClass().equals(Double.class)){
-					value= ((Double) value).intValue();
-					int values = (Integer) value;
-					MossBean.setParameters(mossbean, propertyName, values);
-				}else{
-					MossBean.setParameters(mossbean, propertyName, value);	
-				}
-				return value  +" is set to " +propertyName;
-			}
-		//}	
+
+//	/**A bean that sets the parameters
+//	 * Parameters: propertyName, Object values
+//	 * */
+//	MossBean mossbean = new MossBean();
+//	public String createParameters(String propertyName, Object value) throws Exception{
+//		//	if(propertyName.equals("matom")||propertyName.equals("mbond")||propertyName.equals("mrgat")||propertyName.equals("mrgbd")){
+//		//	return "Not allowed to set value to " + propertyName+ ", internal proerty.";
+//		//}
+//		//else{
+//		if(value.getClass().equals(Double.class)){
+//			value= ((Double) value).intValue();
+//			int values = (Integer) value;
+//			MossBean.setParameters(mossbean, propertyName, values);
+//		}else{
+//			MossBean.setParameters(mossbean, propertyName, value);	
+//		}
+//		return value  +" is set to " +propertyName;
+//	}
+	//}	
 	/**
 	 * Gives a short one word name of the manager used as variable name when
 	 * scripting.
 	 */
-	
+
 	public String getManagerName() {
 		return "moss";}
-	
-	
-	public String parameterValues() throws Exception{
-		ArrayList<String> name = mossbean.getPropertyNames(mossbean);
-		String info="";
-		String names;
-		for(int i=0; i<name.size(); i++){
-			names = name.get(i);
-			if(names.equals("Limits")||names.equals("matom")||names.equals("mbond")||names.equals("mrgat")||names.equals("mrgbd")||names.equals("mode")){		
-			}else {
-			info= info + names +": " + MossBean.getProperty(mossbean, names)  + " \n";
-			}
-		}
-		return info;
-	}
+
 	//Collects compounds from a protein family
 	public IStringMatrix query(String fam, String actType, int limit) throws BioclipseException{
-		
+
 		String sparql =
-		"PREFIX onto: <http://rdf.farmbio.uu.se/chembl/onto/#> " +
-		"PREFIX bo: <http://www.blueobelisk.org/chemistryblogs/>"+
-		"SELECT ?smiles where{ " +
-		"	?target a onto:Target." +
-		"   ?target onto:classL5 ?fam. " + //+ " \"" + fam + "\"." +
-		"	?assay onto:hasTarget ?target . ?activity onto:onAssay ?assay ." +
-		" ?activity onto:standardValue ?st ." +
-		"	?activity onto:type ?actType . " + //" \"" + actType + "\"."+ 
-		"	?activity onto:forMolecule ?mol ."+
-		"	?mol bo:smiles ?smiles.  " +
-		"FILTER regex(?fam, " + "\"" + fam + "\"" + ", \"i\")."+
-		"FILTER regex(?actType, " + "\"" + actType + "\"" + ", \"i\")."+
-	    "}LIMIT "+ limit; 
-		
+			"PREFIX onto: <http://rdf.farmbio.uu.se/chembl/onto/#> " +
+			"PREFIX bo: <http://www.blueobelisk.org/chemistryblogs/>"+
+			"SELECT ?smiles where{ " +
+			"	?target a onto:Target." +
+			"   ?target onto:classL5 ?fam. " + //+ " \"" + fam + "\"." +
+			"	?assay onto:hasTarget ?target . ?activity onto:onAssay ?assay ." +
+			" ?activity onto:standardValue ?st ." +
+			"	?activity onto:type ?actType . " + //" \"" + actType + "\"."+ 
+			"	?activity onto:forMolecule ?mol ."+
+			"	?mol bo:smiles ?smiles.  " +
+			"FILTER regex(?fam, " + "\"" + fam + "\"" + ", \"i\")."+
+			"FILTER regex(?actType, " + "\"" + actType + "\"" + ", \"i\")."+
+			"}LIMIT "+ limit; 
+
 		IStringMatrix matrix = rdf.sparqlRemote("http://rdf.farmbio.uu.se/chembl/sparql",sparql);
 		return matrix;
 	}
 
-	public void run(String inputfile, String outfile,String outidfile) 
+	
+	public void run(String inputfile, String outfile,String outidfile, MossProperties mp) 
 	throws BioclipseException, IOException,ScriptException{
 		IFile in = ResourcePathTransformer.getInstance().transform(inputfile);
 		IFile out= saveMossOutputHelper(outfile);
 		IFile outid =saveMossOutputHelper(outidfile);
 		MossModel mossmodel = new MossModel();
-		//Add values to mossmodel. TODO Change MossModel to bean class?
-		setMossModel(mossmodel);
+
+		mossmodel = collectMoSSProperties(mossmodel,mp);
 		MossRunner.runMoss(mossmodel,in.getLocation().toOSString(), out.getLocation().toOSString(), outid.getLocation().toOSString());
 	}
 
-
-	public IFile saveInformation(IFile filename, List<ArrayList<String>> fam, IProgressMonitor monitor)
-	throws BioclipseException, IOException {
-		String s;
-		if (filename.exists()) {
-			throw new BioclipseException("File already exists!");
-		}
-
-		if (monitor == null)
-			monitor = new NullProgressMonitor();
-		monitor.beginTask("Writing file", 100);
-		try {
-			ByteArrayOutputStream output = new ByteArrayOutputStream();
-			for(int i = 0; i<fam.size(); i++){
-				for(int j=0; j< fam.get(i).size(); j++){
-					if(j == fam.get(i).size()-1){
-						s = fam.get(i).get(j) + "\n ";}
-					else {s = fam.get(i).get(j) + ", ";}
-					byte but[]= s.getBytes();
-					output.write(but); 
-				}
-			}
-			output.close();
-			filename.create(
-					new ByteArrayInputStream(output.toByteArray()),
-					false,
-					monitor
-			);
-		}
-		catch (Exception e) {
-			monitor.worked(100);
-			monitor.done();
-			throw new BioclipseException("Error while writing moss file.", e);
-		} 
-
-		monitor.worked(100);
-		monitor.done();
-		return filename;
-	}
-	/**
-	 * Saves a moss file, i.e. in a format that is acceptable for moss.
-	 * **/
-	public IFile saveMoss(IFile filename, List<ArrayList<String>> fam,
-			IProgressMonitor monitor) throws BioclipseException, IOException {
-		String s;     
-		if (filename.exists()) {
-			throw new BioclipseException("File already exists!");
-		}
-
-		if (monitor == null)
-			monitor = new NullProgressMonitor();
-		monitor.beginTask("Writing file", 100);
-		try {
-			ByteArrayOutputStream output = new ByteArrayOutputStream();
-
-			for(int i = 0; i<fam.size(); i++){
-				s = i+1 +",0," +(String) fam.get(i).get(0) + "\n";	
-				byte but[]= s.getBytes();
-				output.write(but); 
-			}
-			output.close();
-			filename.create(
-					new ByteArrayInputStream(output.toByteArray()),
-					false,
-					monitor
-			);
-		}
-		catch (Exception e) {
-			monitor.worked(100);
-			monitor.done();
-			throw new BioclipseException("Error while writing moss file.", e);
-		} 
-
-		monitor.worked(100);
-		monitor.done();
-		return filename;
-	};
-	/**
-	 * Saves a moss file, i.e. in a format that is acceptable for moss.
-	 * Takes two lists, one for each family.
-	 * **/
-	public IFile saveMoss(IFile filename, List<ArrayList<String>> fam1, List <ArrayList<String>> fam2,
-			IProgressMonitor monitor) throws BioclipseException, IOException {
-		String s;
-		if (filename.exists()) {
-			throw new BioclipseException("File already exists!");
-		}
-		if (monitor == null)
-			monitor = new NullProgressMonitor();
-		monitor.beginTask("Writing file", 100);
-		try {
-			ByteArrayOutputStream output = new ByteArrayOutputStream();
-			for(int i = 0; i<fam1.size(); i++){
-				s = i+1+"p1" +",0," +(String) fam1.get(i).get(0) + "\n";
-				byte but[]= s.getBytes();
-				output.write(but); 
-			}
-			for(int i = 0; i<fam2.size(); i++){
-				s = i+1+"p2" +",0," +(String) fam2.get(i).get(0) + "\n";
-				byte but[]= s.getBytes();
-				output.write(but); 
-			}
-			output.close();
-			filename.create(
-					new ByteArrayInputStream(output.toByteArray()),
-					false,
-					monitor
-			);}
-		catch (Exception e) {
-			monitor.worked(100);
-			monitor.done();
-			throw new BioclipseException("Error while writing moss file.", e);
-		}
-		monitor.worked(100);
-		monitor.done();
-		return filename;
-	};
 	public IFile saveMossOutputHelper(String file) throws BioclipseException, IOException{
 		IFile ifile =ResourcePathTransformer.getInstance().transform(file);
 		return saveMossOutput(ifile, null);
@@ -264,29 +146,132 @@ public class MossManager implements IBioclipseManager {
 	public MossProperties createMoSSProperties() {
 		return new MossProperties();
 	}
-	
+
 	public MossProperties createMoSSProperties(String json)
 	throws BioclipseException {
 		return MossProperties.createMossProperties(json);
 	}
 
-	private void setMossModel(MossModel mossmodel){
-		mossmodel.setMinimalSupport(mossbean.getMinimalSupport());
-		mossmodel.setMaximalSupport(mossbean.getMaximalSupport());
-		mossmodel.setThreshold(mossbean.getThreshold());
-		mossmodel.setExNode(mossbean.getExNode());
-		mossmodel.setExSeed(mossbean.getExSeed());
-		mossmodel.setSeed(mossbean.getSeed());
-		mossmodel.setMinRing(mossbean.getMinRing());
-		mossmodel.setMaxRing(mossbean.getMaxRing());
-		mossmodel.setMaxEmbMemory(mossbean.getMaxEmbMemory());
-		mossmodel.setMbond(mossbean.getMbond());
-		mossmodel.setMrgbd(mossbean.getMrgbd());
-		mossmodel.setMatom(mossbean.getMatom());
-		mossmodel.setMrgat(mossbean.getMrgat());
-		mossmodel.setMode(mossbean.getMode());
+	private MossModel collectMoSSProperties(MossModel mossmodel,MossProperties mp){
+		mossmodel.setMinimalSupport(mp.getMinimalSupport()*0.01);
+		mossmodel.setMaximalSupport(mp.getMaximalSupport()*0.01);
+		mossmodel.setThreshold(mp.getThreshold());
+		mossmodel.setExNode(mp.getExNode());
+		mossmodel.setExSeed(mp.getExSeed());
+		mossmodel.setSeed(mp.getSeed());
+		mossmodel.setMinRing(mp.getMinRing());
+		mossmodel.setMaxRing(mp.getMaxRing());
+		mossmodel.setMaxEmbMemory(mp.getMaxEmbMemory());
+		mossmodel.setMbond(getMbond(mp));
+		mossmodel.setMrgbd(getMrgbd(mp));
+		mossmodel.setMatom(getMatom(mp));
+		mossmodel.setMrgat(getMrgat(mp));
+		mossmodel.setMode(getMode(mp));
+		
+		return mossmodel;
 	}
 
+	public int getMatom(MossProperties mp){
+		int matom= Atoms.ELEMMASK;//nollstŠlla if =never, don't match atom/aromaticity
+
+		// Ignore atoms
+		if(mp.getIgnoreBond().equals("always")){
+			matom &= ~Atoms.ELEMMASK;}
+
+		//Match charge of atoms
+		if(mp.getMatchChargeOfAtoms().equals("match")){
+			matom |= Atoms.CHARGEMASK;
+		}
+
+		//Match aromaticity
+		if(mp.matchAromaticityAtoms.equals("match")){
+			matom &= Atoms.AROMATIC;}
+
+		return matom;
+	}
+	public int getMbond(MossProperties mp){
+		int mbond = Bonds.BONDMASK;//nollstŠlla = never,
+
+		//Aromatic bonds
+		if(mp.getAromatic().equals("upgrade")){
+			mbond &= Bonds.UPGRADE;
+		}else if(mp.getAromatic().equals("downgrade")){
+			mbond &= Bonds.DOWNGRADE;}
+
+		//Ignore bonds
+		if(mp.getIgnoreBond().equals("always")){
+			mbond &= Bonds.SAMETYPE;
+		}
+		return mbond;
+	}
+
+	public int getMrgat(MossProperties mp){
+		int mrgat = Atoms.ELEMMASK ; //nollstŠlla =never, 
+
+		if(mp.getIgnoreTypeOfAtoms().equals("always")||mp.getIgnoreTypeOfAtoms().equals("in rings")){
+			mrgat &= ~Atoms.ELEMMASK;}
+		return mrgat;
+	}
+
+	public int getMrgbd(MossProperties mp){
+		int mrgbd = Bonds.BONDMASK;//nollstŠlla = never Aromatic bonds
+		if(mp.getAromatic().equals("upgrade")){
+			mrgbd &= Bonds.UPGRADE;}
+		else if(mp.getAromatic().equals("downgrade")){
+			mrgbd &= Bonds.DOWNGRADE;}
+		//Ignore bonds
+		if(mp.getIgnoreBond().equals("always") || mp.getIgnoreBond().equals("in rings")){
+			mrgbd &= Bonds.SAMETYPE;
+		}
+		return mrgbd;
+	}
+	public int getMode(MossProperties mp){
+		int mode =Miner.DEFAULT;// default   | Miner.RINGEXT;Ring extension;
+		
+		//none is default
+		if(mp.getRingExtension().equals("full")){
+			mode |= Miner.RINGEXT;
+		}else if(mp.getRingExtension().equals("merge")){
+			mode |= Miner.MERGERINGS |Miner.RINGEXT |Miner.CLOSERINGS | Miner.PR_UNCLOSE;
+		}else if(mp.getRingExtension().equals("filter")){
+			mode |= Miner.CLOSERINGS | Miner.PR_UNCLOSE;
+		}
+		//kekule if no representation
+		if(mp.getKekule() == false){
+			mode |= Miner.AROMATIZE;
+		}
+		//Carbon chain length. default false
+		if(mp.getCarbonChainLength()){
+			mode |= Miner.CHAINEXT;
+		}
+		//extPrunr
+		//none is default
+		if(mp.getExtPrune().equals("full")){
+			mode |=  Miner.PR_PERFECT;
+		    mode &= ~Miner.PR_PARTIAL;
+		}else if(mp.getExtPrune().equals("partial")){
+			mode |=  Miner.PR_PARTIAL;
+			mode &= ~Miner.PR_PERFECT;
+		}
+		//canonic default true
+		if(!mp.getCanonic()){
+			mode &= ~Miner.PR_CANONIC;
+		}
+		//equiv default false
+		if(mp.getEquiv()){
+			mode |= Miner.PR_EQUIV;		
+		}
+		//unembed sibling default false
+		if(mp.getUnembedSibling()){
+			mode |= Miner.UNEMBED;
+		}
+		//defualt true
+		if(!mp.getClosed()){
+			mode &= ~Miner.CLOSED;
+		}
+		
+		return mode;
+	}
 
 	/*String[] desc ={
 	"Examplea moss.createParamteters(\"aromatic\", \"always\")," + "\n" +
@@ -321,25 +306,13 @@ public class MossManager implements IBioclipseManager {
 	" (\"split\", true/false)  |boolean",
 	" (\"threshold\", value)   |double",
 	" (\"unembedSibling\", false/true)   |boolean",""
-	
+
 	};
 
-//returns all names of parameters
-public String parameterDescription() throws Exception, BioclipseException{
-ArrayList<String> name = mossbean.getPropertyNames(mossbean);
-String names = desc[0] +"\n";
-int i=0;
-while(i<name.size()){
-		names= names + name.get(i)+ ": " + desc[i+1] +"\n" ;
-		i++;
-}
-return names; 
-
-}
 	 */
 
 
-	public void FocusComplementSet(IFile infiles,IFile outfile,IProgressMonitor monitor) 
+	public void focusComplementSet(IFile infiles,IFile outfile,IProgressMonitor monitor) 
 	throws BioclipseException, IOException{
 		File infile = new File(infiles.getLocationURI());
 		BufferedReader br = new BufferedReader(new FileReader(infile));
@@ -350,26 +323,26 @@ return names;
 		if (outfile.exists()) {
 			throw new BioclipseException("File already exists!");
 		}
-		
+
 		if (monitor == null)
 			monitor = new NullProgressMonitor();
-			monitor.beginTask("Writing file", 100);
-		
-			try {
+		monitor.beginTask("Writing file", 100);
+
+		try {
 			while((line=br.readLine())!=null){
 				split= line.split(",");
 				try {
 					if(split[0].contains("A")){string = split[0]+",0,"+split[2]+"\n";}
 					else if(split[0].contains("B")){string = split[0]+",1,"+split[2]+"\n";}
-					
+
 					byte but[]= string.getBytes();
 					out.write(but); 
-					
+
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
 			}
-			
+
 			out.close();
 			outfile.create(
 					new ByteArrayInputStream(out.toByteArray()),
@@ -385,25 +358,7 @@ return names;
 
 		monitor.worked(100);
 		monitor.done();
-		
-//		BufferedReader br = new BufferedReader(new FileReader(file));
-//		
-//		FileWriter fstream = new FileWriter(ut);
-//	    BufferedWriter out = new BufferedWriter(fstream);
-//		String line = null;
-//		String[]split;
-//		while((line=br.readLine())!=null){
-//			split= line.split(",");
-//			try {
-//				if(split[0].contains("A")){out.write(split[0]+",1, "+split[2]+"\n");}
-//				else if(split[0].contains("B")){out.write(split[0]+", 0, "+split[2]+"\n");}
-//			} catch (IOException e) {
-//				e.printStackTrace();
-//			}
-//		}
-//		out.close();
-//		br.close();
-//		
+	
 	}
 }
 
