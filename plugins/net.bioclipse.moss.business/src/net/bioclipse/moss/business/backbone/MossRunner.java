@@ -114,7 +114,7 @@ public class MossRunner {
                 .getMrgat(), mossModel.getMrgbd());
         miner.setMaxEmbs(mossModel.getMaxEmbMemory());
 
-        // TODO: Let type be a changeable parameter
+        // TODO: Let type be a changeable parameter in future
         int type = Fragment.GRAPHS | Fragment.GREEDY;
         miner.setType(type);
 

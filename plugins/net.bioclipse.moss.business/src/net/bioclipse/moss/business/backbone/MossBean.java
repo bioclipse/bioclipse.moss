@@ -31,7 +31,11 @@ public class MossBean implements java.io.Serializable {
 	private int mbond , mrgbd, matom, mrgat, mode;
 	private int maxRing = 0, minRing = 0;
 	private int maxEmbMemory = 0;
+	public String ringExtension="none", Kekule="", carbonChainLength="", extPrune ="";//mbond
+	public String aromatic ="", ignoreBond="";//...
+	boolean canonic= true, equiv = false, unembedSibling = false;//mode
 	
+	public String ignoreTypeOfAtoms="", matchChargeOfAtoms="", matchAromaticityAtoms="" ;
 	/** No-arg constructor (takes no arguments). */
 	public MossBean() {
 	}
@@ -178,11 +182,8 @@ public class MossBean implements java.io.Serializable {
 		this.seed = seed;
 	}
 	
+	
 //MODE
-	
-	
-	public String ringExtension="none", Kekule="", carbonChainLength="", extPrune ="";
-	boolean canonic= true, equiv = false, unembedSibling = false;
 	//unembed sibling nodes
 	public void setUnembedSibling(boolean unembedSibling){
 		this.unembedSibling= unembedSibling;
@@ -284,8 +285,6 @@ public class MossBean implements java.io.Serializable {
 	
 //MATOM MGRAT
 	
-	String ignoreTypeOfAtoms="", matchChargeOfAtoms="", matchAromaticityAtoms="" ;
-
 	public void setIgnoreAtomTypes(String ignoreTypeOfAtoms){//aromatic,upgrade,downgrade.
 		this.ignoreTypeOfAtoms = ignoreTypeOfAtoms;
 	}
@@ -343,7 +342,6 @@ public class MossBean implements java.io.Serializable {
 	
 //MBOND MRGBD
 	
-	String aromatic ="", ignoreBond="";
 	public void setAromatic(String aromatic){//aromatic,upgrade,downgrade.
 		this.aromatic = aromatic;
 	}

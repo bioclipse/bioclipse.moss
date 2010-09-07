@@ -9,16 +9,16 @@
 	      </scriptContribution>
 	   </extension>
 		   
-	      <extension
+	    <!--  <extension
 	         point="org.eclipse.help.contexts">
 	         <contexts file="contexts.xml" />
-	   </extension>
+	   </extension> 
 	
 	<extension
 	         point="org.eclipse.help.toc">
 	      <toc
 	            file="toc.xml"
 	            primary="true"/>
-	   </extension>
+	   </extension> -->
 	     
 	</plugin>
