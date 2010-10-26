@@ -11,7 +11,7 @@
  ******************************************************************************/
 package net.bioclipse.moss.business;
 
-import net.bioclipse.managers.business.IBioclipseJSManager;
+import net.bioclipse.core.api.managers.IBioclipseJSManager;
 
 public interface IJavaScriptMossManager
        extends IMossManager, IBioclipseJSManager {

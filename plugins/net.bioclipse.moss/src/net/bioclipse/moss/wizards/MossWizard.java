@@ -28,8 +28,8 @@ import moss.Extension;
 import moss.Notation;
 import moss.SMILES;
 
-import net.bioclipse.core.business.BioclipseException;
-import net.bioclipse.core.domain.IMolecule;
+import net.bioclipse.core.api.BioclipseException;
+import net.bioclipse.core.api.domain.IMolecule;
 import net.bioclipse.moss.InputMolecule;
 import net.bioclipse.moss.MossModel;
 

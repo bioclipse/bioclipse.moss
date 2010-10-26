@@ -16,7 +16,7 @@ import java.io.StringWriter;
 import moss.Atoms;
 import moss.Bonds;
 import moss.Miner;
-import net.bioclipse.core.business.BioclipseException;
+import net.bioclipse.core.api.BioclipseException;
 
 import org.codehaus.jackson.map.ObjectMapper;
 

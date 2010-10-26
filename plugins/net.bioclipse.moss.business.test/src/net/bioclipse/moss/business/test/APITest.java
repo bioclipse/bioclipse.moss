@@ -10,8 +10,8 @@
  ******************************************************************************/
 package net.bioclipse.moss.business.test;
 
+import net.bioclipse.core.api.managers.IBioclipseManager;
 import net.bioclipse.core.tests.AbstractManagerTest;
-import net.bioclipse.managers.business.IBioclipseManager;
 import net.bioclipse.moss.business.IMossManager;
 import net.bioclipse.moss.business.MossManager;
 
