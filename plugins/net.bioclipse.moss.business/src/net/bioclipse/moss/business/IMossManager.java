@@ -12,8 +12,6 @@
 package net.bioclipse.moss.business;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.script.ScriptException;
 
@@ -21,9 +19,9 @@ import net.bioclipse.core.PublishedClass;
 import net.bioclipse.core.PublishedMethod;
 import net.bioclipse.core.Recorded;
 import net.bioclipse.core.business.BioclipseException;
+import net.bioclipse.core.domain.IStringMatrix;
 import net.bioclipse.managers.business.IBioclipseManager;
 import net.bioclipse.moss.business.props.MossProperties;
-import net.bioclipse.rdf.model.IStringMatrix;
 
 @PublishedClass(
     value="Manager to provide MoSS substructure mining functionality.",

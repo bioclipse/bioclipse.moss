@@ -11,19 +11,11 @@
 package net.bioclipse.moss.business;
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.DataOutputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.net.URI;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.script.ScriptException;
 
@@ -32,14 +24,13 @@ import moss.Bonds;
 import moss.Miner;
 import net.bioclipse.core.ResourcePathTransformer;
 import net.bioclipse.core.business.BioclipseException;
+import net.bioclipse.core.domain.IStringMatrix;
 import net.bioclipse.managers.business.IBioclipseManager;
-import net.bioclipse.moss.business.backbone.MossBean;
 import net.bioclipse.moss.business.backbone.MossModel;
 import net.bioclipse.moss.business.backbone.MossRunner;
 import net.bioclipse.moss.business.props.MossProperties;
 import net.bioclipse.rdf.Activator;
 import net.bioclipse.rdf.business.IJavaRDFManager;
-import net.bioclipse.rdf.model.IStringMatrix;
 
 import org.apache.log4j.Logger;
 import org.eclipse.core.resources.IFile;
@@ -172,7 +163,7 @@ public class MossManager implements IBioclipseManager {
 	}
 
 	public int getMatom(MossProperties mp){
-		int matom= Atoms.ELEMMASK;//nollstŠlla if =never, don't match atom/aromaticity
+		int matom= Atoms.ELEMMASK;//nollstï¿½lla if =never, don't match atom/aromaticity
 
 		// Ignore atoms
 		if(mp.getIgnoreBond().equals("always")){
@@ -190,7 +181,7 @@ public class MossManager implements IBioclipseManager {
 		return matom;
 	}
 	public int getMbond(MossProperties mp){
-		int mbond = Bonds.BONDMASK;//nollstŠlla = never,
+		int mbond = Bonds.BONDMASK;//nollstï¿½lla = never,
 
 		//Aromatic bonds
 		if(mp.getAromatic().equals("upgrade")){
@@ -206,7 +197,7 @@ public class MossManager implements IBioclipseManager {
 	}
 
 	public int getMrgat(MossProperties mp){
-		int mrgat = Atoms.ELEMMASK ; //nollstŠlla =never, 
+		int mrgat = Atoms.ELEMMASK ; //nollstï¿½lla =never, 
 
 		if(mp.getIgnoreTypeOfAtoms().equals("always")||mp.getIgnoreTypeOfAtoms().equals("in rings")){
 			mrgat &= ~Atoms.ELEMMASK;}
@@ -214,7 +205,7 @@ public class MossManager implements IBioclipseManager {
 	}
 
 	public int getMrgbd(MossProperties mp){
-		int mrgbd = Bonds.BONDMASK;//nollstŠlla = never Aromatic bonds
+		int mrgbd = Bonds.BONDMASK;//nollstï¿½lla = never Aromatic bonds
 		if(mp.getAromatic().equals("upgrade")){
 			mrgbd &= Bonds.UPGRADE;}
 		else if(mp.getAromatic().equals("downgrade")){
