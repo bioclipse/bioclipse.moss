@@ -22,7 +22,8 @@
          version="0.0.0"/>
 
    <requires>
-      <import plugin="net.bioclipse.chemoinformatics"/>
+      <import feature="net.bioclipse.rdf_feature" version="2.4.1.20110201" match="greaterOrEqual"/>
+      <import feature="net.bioclipse.chemoinformatics_feature" version="2.4.1.v20100830" match="greaterOrEqual"/>
    </requires>
 
 </feature>
