@@ -11,6 +11,6 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.core.resources,
  net.bioclipse.core,
  net.bioclipse.ui,
- net.bioclipse.scripting.ui;bundle-version="2.0.0"
+ net.bioclipse.scripting.ui
 Eclipse-LazyStart: true
 Import-Package: org.apache.log4j

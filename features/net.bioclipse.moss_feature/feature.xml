@@ -2,7 +2,7 @@
 <feature
       id="net.bioclipse.moss_feature"
       label="Bioclipse MOSS Feature"
-      version="2.3.0"
+      version="2.4.3"
       provider-name="The Bioclipse Team"
       plugin="net.bioclipse.moss.business">
 
