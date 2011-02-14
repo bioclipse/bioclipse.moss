@@ -15,9 +15,9 @@ Require-Bundle: org.eclipse.ui,
  net.sf.cglib,
  org.springframework.osgi.aopalliance.osgi,
  net.bioclipse.scripting.ui,
- net.bioclipse.rdf,
- org.eclipse.ui.views;bundle-version="3.4.1",
- org.eclipse.core.resources
+ org.eclipse.ui.views,
+ org.eclipse.core.resources,
+ net.bioclipse.rdf
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Import-Package: org.apache.log4j
 Bundle-ActivationPolicy: lazy
