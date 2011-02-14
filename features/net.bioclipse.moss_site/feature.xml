@@ -21,4 +21,8 @@
          id="net.bioclipse.moss_feature"
          version="0.0.0"/>
 
+   <requires>
+      <import plugin="net.bioclipse.chemoinformatics"/>
+   </requires>
+
 </feature>
