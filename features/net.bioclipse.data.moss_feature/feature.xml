@@ -2,7 +2,7 @@
 <feature
       id="net.bioclipse.data.moss_feature"
       label="Example MoSS Files Feature"
-      version="2.4.0.RC1"
+      version="2.5.0.qualifier"
       provider-name="The Bioclipse Team"
       plugin="net.bioclipse.data.moss">
 
@@ -23,7 +23,7 @@
    </url>
 
    <requires>
-      <import feature="net.bioclipse.core_feature" version="2.4.0.RC1"/>
+      <import feature="net.bioclipse.core_feature"/>
    </requires>
 
    <plugin
