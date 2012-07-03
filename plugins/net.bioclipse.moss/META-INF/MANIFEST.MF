@@ -1,8 +1,8 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Moss Plug-in
+Bundle-Name: MOSS Plug-in
 Bundle-SymbolicName: net.bioclipse.moss;singleton:=true
-Bundle-Version: 1.0.0
+Bundle-Version: 2.5.0.qualifier
 Bundle-Activator: net.bioclipse.moss.Activator
 Require-Bundle: org.eclipse.ui,
  org.eclipse.help.webapp,

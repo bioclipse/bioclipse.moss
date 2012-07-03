@@ -21,9 +21,13 @@
          id="net.bioclipse.moss_feature"
          version="0.0.0"/>
 
+   <includes
+         id="net.bioclipse.data.moss_feature"
+         version="0.0.0"/>
+
    <requires>
-      <import feature="net.bioclipse.rdf_feature" />
-      <import feature="net.bioclipse.chemoinformatics_feature" />
+      <import feature="net.bioclipse.rdf_feature"/>
+      <import feature="net.bioclipse.chemoinformatics_feature"/>
    </requires>
 
 </feature>

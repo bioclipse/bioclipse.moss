@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: MOSS Manager Plugin
 Bundle-SymbolicName: net.bioclipse.moss.business;singleton:=true
-Bundle-Version: 2.3.0
+Bundle-Version: 2.5.0.qualifier
 Bundle-Activator: net.bioclipse.moss.Activator
 Bundle-Vendor: The Bioclipse Project
 Export-Package: net.bioclipse.moss,
