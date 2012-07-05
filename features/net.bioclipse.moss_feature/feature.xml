@@ -30,8 +30,8 @@ The Eclipse Public License accompanies this distribution, and is available at ht
    </url>
 
    <requires>
-      <import feature="net.bioclipse.chemoinformatics_feature" />
-      <import feature="net.bioclipse.rdf_feature" />
+      <import feature="net.bioclipse.chemoinformatics_feature"/>
+      <import feature="net.bioclipse.rdf_feature"/>
    </requires>
 
    <plugin
